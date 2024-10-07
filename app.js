@@ -3,12 +3,6 @@ window.onload = () => {
     return renderPlaces(places);
 };
 
-// Workaround for an AR.js bug (https://github.com/jeromeetienne/AR.js/issues/410)
-const sceneEl = document.querySelector('a-scene');
-sceneEl.addEventListener('loaded', () => {
-    sceneEl.camera = new THREE.PerspectiveCamera();
-});
-
 function staticLoadPlaces() {
     return [
         {
@@ -34,7 +28,7 @@ function renderPlaces(places) {
         image.setAttribute('src', "#image-asset");  // Loads the image from assets (defined in index.html)
         image.setAttribute('look-at', '[gps-camera]');  // Ensures the image always faces the user
         image.setAttribute('scale', '10 10 1');  // Scale to avoid side-plane issues
-        image.setAttribute('rotation', '0 180 0');  // Reset rotation to face the camera directly
+        // image.setAttribute('rotation', '0 180 0');  // Reset rotation to face the camera directly
         image.setAttribute('material', 'side: double');  // Make the image double-sided
 
         // This part dispatches an event once the GPS-based entity is loaded (optional for debugging)
