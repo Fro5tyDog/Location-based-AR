@@ -22,14 +22,20 @@ function renderPlaces(places) {
         const latitude = place.location.lat;  // Extracts the latitude of the place
         const longitude = place.location.lng;  // Extracts the longitude of the place
 
+//         <a-entity class="link"
+//   geometry="primitive: plane; height: 1; width: 1"
+//   material="shader: flat; src: #cubes-thumb"></a-entity>
+
         // Create an A-frame entity for the 2D image
-        const image = document.createElement('a-image');
+        const image = document.createElement('a-entity');
         image.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);  // Sets the location
-        image.setAttribute('src', "#image-asset");  // Loads the image from assets (defined in index.html)
+        // image.setAttribute('src', "#image-asset");  // Loads the image from assets (defined in index.html)
         image.setAttribute('look-at', '[gps-camera]');  // Ensures the image always faces the user
-        image.setAttribute('scale', '10 10 1');  // Scale to avoid side-plane issues
+        image.setAttribute('geometry', 'primitive: plane; height: 1; width: 1');
+        image.setAttribute('material', 'shader: flat; src: #image-asset');
+        // image.setAttribute('scale', '10 10 1');  // Scale to avoid side-plane issues
         // image.setAttribute('rotation', '0 180 0');  // Reset rotation to face the camera directly
-        image.setAttribute('material', 'side: double');  // Make the image double-sided
+        // image.setAttribute('material', 'side: double');  // Make the image double-sided
 
         // This part dispatches an event once the GPS-based entity is loaded (optional for debugging)
         image.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
