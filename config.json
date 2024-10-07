@@ -1,19 +1,9 @@
 {
-    "locations": [
-      {
-        "id": "location1",
-        "latitude": 1.3087717990709324,
-        "longitude": 103.84863162366109,
-        "3dModels": ["./models/cube.gltf"],
-        "2dImages": ["./images/thumbEx1.png"]
-      },
-      {
-        "id": "location2",
-        "latitude": 1.3002364682108376,
-        "longitude": 103.85771388182734,
-        "3dModels": ["./models/cube.gltf"],
-        "2dImages": ["./images/thumbEx1.png"]
-      }
-    ]
-  }
-  
+"location": {
+    "id": "location1",
+    "latitude": 1.3087717990709324,
+    "longitude": 103.84863162366109,
+    "3dModel": "./models/model1.gltf"
+}
+}
+
