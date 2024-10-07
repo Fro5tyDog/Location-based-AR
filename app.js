@@ -9,7 +9,7 @@ fetch('config.json')
       const modelEntity = document.createElement('a-entity');
       modelEntity.setAttribute('gltf-model', `src: ${location['3dModel']}`);
       modelEntity.setAttribute('gps-entity-place', `latitude: ${location.latitude}; longitude: ${location.longitude};`);
-      modelEntity.setAttribute('scale', '1 1 1');
+      modelEntity.setAttribute('scale', '100 100 100');
       scene.appendChild(modelEntity);
     }
   });
