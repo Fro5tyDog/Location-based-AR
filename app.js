@@ -31,24 +31,13 @@ function renderPlaces(places) {
         // This part dispatches an event once the GPS-based entity is loaded (optional for debugging)
         icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
 
-        // Add event listener to handle the click
-        icon.addEventListener('click', function (ev) {
+        // Add click listener to the model (for future interactivity)
+        const clickListener = function (ev) {
             ev.stopPropagation();
             ev.preventDefault();
-            console.log('Cube clicked, replacing with another model...');
-
-            // Remove the current (cube) model
-            icon.remove();
-
-            // Create and append the new 3D model (after cube is removed)
-            const newModel = document.createElement('a-entity');
-            newModel.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
-            newModel.setAttribute('gltf-model', '#new-model-asset');  // Add your new model here
-            newModel.setAttribute('scale', '3 3 3');  // Adjust scale for the new model
-
-            // Append the new model to the scene
-            scene.appendChild(newModel);
-        });
+            console.log('Clicked');  // Logs 'Clicked' when the model is clicked
+        };
+        icon.addEventListener('click', clickListener);  // Attach the click listener to the model
 
         scene.appendChild(icon);  // Adds the 3D model to the A-frame scene
     });

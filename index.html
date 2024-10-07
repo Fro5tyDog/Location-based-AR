@@ -21,6 +21,11 @@
         vr-mode-ui="enabled: false"
         embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
+            
+            <!-- Ambient and directional lights -->
+            <a-light id="ambientLight" type="ambient" color="#ffffff" intensity="1"></a-light>
+            <a-light id="sunLight" type="directional" position="1 1 1" intensity="1"></a-light>
+        
             <a-assets>
                 <a-asset-item id="cube-asset" src="models/cube.gltf"></a-asset-item>
                 <a-asset-item id="new-model-asset" src="models/a_chinese_worker.gltf"></a-asset-item>
