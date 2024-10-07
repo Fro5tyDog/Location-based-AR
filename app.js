@@ -8,8 +8,8 @@ function staticLoadPlaces() {
         {
             name: "LTA",
             location: {
-                lat: 1.30877,
-                lng: 103.84863
+                lat: 1.30827,
+                lng: 103.84929
             }
         }
     ];
