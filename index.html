@@ -14,10 +14,10 @@
         vr-mode-ui="enabled: false"
 		embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
-        
-        <a-entity gltf-model="./assets/magnemite/scene.gltf" 
+       
+        <a-camera gps-new-camera rotation-reader></a-camera>
+        <a-entity gltf-model="./assets/cube.gltf" 
         rotation="0 180 0" scale="15 15 15" gps-new-entity-place="longitude: 1.30822; latitude: 103.84929;"/>
         
-        <a-camera gps-new-camera rotation-reader></a-camera>
 	</a-scene>
 </body>
