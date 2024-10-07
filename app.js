@@ -26,7 +26,7 @@ function renderPlaces(places) {
         const image = document.createElement('a-image');
         image.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);  // Sets the location
         image.setAttribute('src', "#image-asset");  // Loads the image from assets (defined in index.html)
-        image.setAttribute('look-at', '[gps-camera]');  // Ensures the image always faces the user
+        // image.setAttribute('look-at', '[gps-camera]');  // Ensures the image always faces the user
         image.setAttribute('scale', '10 10 1');  // Scale to avoid side-plane issues
         image.setAttribute('rotation', '0 180 0');  // Reset rotation to face the camera directly
         image.setAttribute('material', 'side: double');  // Make the image double-sided
