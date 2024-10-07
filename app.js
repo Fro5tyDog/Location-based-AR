@@ -27,7 +27,9 @@ function renderPlaces(places) {
         image.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);  // Sets the location
         image.setAttribute('src', "#image-asset");  // Loads the image from assets (defined in index.html)
         image.setAttribute('look-at', '[gps-camera]');  // Ensures the image always faces the user
-        image.setAttribute('scale', '10 10 10');  // Adjusts the size of the image
+        image.setAttribute('rotation', '0 0 0');
+        image.setAttribute('material', 'side: double');
+        image.setAttribute('scale', '10 10 1');  // Adjusts the size of the image
 
         // This part dispatches an event once the GPS-based entity is loaded (optional for debugging)
         image.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
