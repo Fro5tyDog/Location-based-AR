@@ -28,7 +28,7 @@ function renderPlaces(places) {
         image.setAttribute('src', "#image-asset");  // Loads the image from assets (defined in index.html)
         image.setAttribute('look-at', '[gps-camera]');  // Ensures the image always faces the user
         // image.setAttribute('rotation', '0 0 0');
-        image.setAttribute('material', 'side: double');
+        image.setAttribute('side', 'double');
         image.setAttribute('scale', '10 10 1');  // Adjusts the size of the image
 
         // This part dispatches an event once the GPS-based entity is loaded (optional for debugging)
