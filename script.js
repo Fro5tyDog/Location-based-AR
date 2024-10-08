@@ -57,7 +57,7 @@ function renderPlaces(places) {
         setTimeout(() => {
             model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
             model.setAttribute('rotation', '0 180 0');
-            model.setAttribute('animation-mixer', '');
+            model.setAttribute('animation-mixer', 'clip: swing; loop: repeat');
             model.setAttribute('scale', '0.15 0.15 0.15');
         }, 100);
 
