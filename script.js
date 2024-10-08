@@ -1,7 +1,17 @@
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', function () {
+    const scene = document.querySelector('a-scene');
+    scene.addEventListener('loaded', function () {
+        console.log('A-Frame scene fully initialized');
+        // Place your code here that should run after A-Frame is initialized
+        initializeMyApp();
+    });
+});
+
+function initializeMyApp() {
+// Your custom JavaScript logic here
     let places = staticLoadPlaces();
     renderPlaces(places);
-};
+}
 
 function staticLoadPlaces() {
    return [
