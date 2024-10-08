@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const scene = document.querySelector('a-scene');
     scene.addEventListener('loaded', function () {
         console.log('A-Frame scene fully initialized');
-        // Place your code here that should run after A-Frame is initialized
         initializeMyApp();
     });
 });
@@ -24,8 +23,7 @@ function staticLoadPlaces() {
     ];
 }
 
-let previousLocation = { lat: null, lng: null };
-const updateThreshold = 0.0001; // Adjust the threshold to control the sensitivity (e.g., ~11 meters)
+let model = null; // Store the model globally so it's only created once
 
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
@@ -34,41 +32,23 @@ function renderPlaces(places) {
         let latitude = place.location.lat;
         let longitude = place.location.lng;
 
-        // Check if the GPS location has changed significantly
-        if (previousLocation.lat !== null && previousLocation.lng !== null) {
-            const distance = Math.sqrt(
-                Math.pow(latitude - previousLocation.lat, 2) + 
-                Math.pow(longitude - previousLocation.lng, 2)
-            );
-            if (distance < updateThreshold) {
-                console.log("GPS change is too small, skipping update.");
-                return; // Skip updating if the GPS change is below the threshold
-            }
-        }
-
-        // Store new location as previous location
-        previousLocation = { lat: latitude, lng: longitude };
-
-        // Create the model entity
-        let model = document.createElement('a-entity');
-        model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-
-        // Set the model's attributes after a slight delay
-        setTimeout(() => {
+        // Create the model only once if it doesn't exist
+        if (model === null) {
+            model = document.createElement('a-entity');
+            model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
             model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
             model.setAttribute('rotation', '0 0 0');
             model.setAttribute('animation-mixer', '');
-            model.setAttribute('scale', '0.15 0.15 0.15');
-        }, 100);
+            model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
 
-        // Event listener for when the model is fully loaded
-        model.addEventListener('loaded', () => {
-            window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'));
-            console.log('Entity and camera loaded');
-        });
+            // Event listener for when the model is fully loaded
+            model.addEventListener('loaded', () => {
+                window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'));
+                console.log('Model loaded and added to scene');
+            });
 
-        // Append the model to the scene
-        scene.appendChild(model);
+            // Append the model to the scene
+            scene.appendChild(model);
+        }
     });
 }
-
