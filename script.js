@@ -37,7 +37,6 @@ function renderPlaces(places) {
         let entity = document.createElement('a-entity');
         entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
         entity.setAttribute('rotation', '0 180 0');
-        entity.setAttribute('animation-mixer', '');
         entity.setAttribute('scale', '0.15 0.15 0.15');
 
         // Load model manually using Three.js and set it on object3D
@@ -62,7 +61,7 @@ function renderPlaces(places) {
 //        model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
 //        model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
 //        model.setAttribute('rotation', '0 180 0');
-       
+//        model.setAttribute('animation-mixer', '');
 //        model.setAttribute('scale', '0.15 0.15 0.15');
 
 //        model.addEventListener('loaded', () => {
