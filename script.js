@@ -24,12 +24,30 @@ function staticLoadPlaces() {
     ];
 }
 
+let previousLocation = { lat: null, lng: null };
+const updateThreshold = 0.0001; // Adjust the threshold to control the sensitivity (e.g., ~11 meters)
+
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
 
     places.forEach((place) => {
         let latitude = place.location.lat;
         let longitude = place.location.lng;
+
+        // Check if the GPS location has changed significantly
+        if (previousLocation.lat !== null && previousLocation.lng !== null) {
+            const distance = Math.sqrt(
+                Math.pow(latitude - previousLocation.lat, 2) + 
+                Math.pow(longitude - previousLocation.lng, 2)
+            );
+            if (distance < updateThreshold) {
+                console.log("GPS change is too small, skipping update.");
+                return; // Skip updating if the GPS change is below the threshold
+            }
+        }
+
+        // Store new location as previous location
+        previousLocation = { lat: latitude, lng: longitude };
 
         // Create the model entity
         let model = document.createElement('a-entity');
