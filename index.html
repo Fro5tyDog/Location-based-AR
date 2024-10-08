@@ -7,7 +7,7 @@
     <script type="text/javascript" src="https://aframe.io/releases/1.3.0/aframe.min.js" ></script>
     <script type="text/javascript" src="https://www.unpkg.com/@ar-js-org/ar.js@3.4.5/three.js/build/ar-threex-location-only.js" ></script>
     <script type="text/javascript" src="https://www.unpkg.com/@ar-js-org/ar.js@3.4.5/aframe/build/aframe-ar.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
 </head>
 
 <body style='margin: 0; overflow: hidden;'>
@@ -15,7 +15,7 @@
         vr-mode-ui="enabled: false"
         arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
   
-        <a-entity gps-entity-place="latitude: 1.308865; longitude: 103.849889" gltf-model="./assets/magnemite/scene.gltf" rotation="0 180 0" animation-mixer scale="0.15 0.15 0.15"/>
+        <a-entity gps-entity-place="latitude: 1.308865; longitude: 103.849889" gltf-model="./assets/magnemite/scene.gltf" rotation="0 180 0" animation-mixer="loop: repeat" scale="0.15 0.15 0.15"/>
         <a-camera gps-camera></a-camera>
 	</a-scene>
 </body>
