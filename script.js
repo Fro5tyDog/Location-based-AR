@@ -62,12 +62,12 @@ function renderPlaces(places) {
         }, 100);
 
         // Create and append the camera inside the model entity
-        let camera = document.createElement('a-camera');
-        camera.setAttribute('gps-camera', '');
-        camera.setAttribute('rotation-reader', '');
+        // let camera = document.createElement('a-camera');
+        // camera.setAttribute('gps-camera', '');
+        // camera.setAttribute('rotation-reader', '');
 
         // Append the camera to the model entity
-        model.appendChild(camera);
+        // model.appendChild(camera);
 
         // Event listener for when the model is fully loaded
         model.addEventListener('loaded', () => {
