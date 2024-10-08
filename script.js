@@ -38,7 +38,7 @@ function renderPlaces(places) {
             model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
             model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
             model.setAttribute('rotation', '0 0 0');
-            model.setAttribute('animation-mixer', '');
+            model.setAttribute('animation-mixer', 'clip: hover; loop: repeat;');
             model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
 
             // Event listener for when the model is fully loaded
