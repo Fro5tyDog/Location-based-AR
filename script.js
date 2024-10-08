@@ -25,25 +25,51 @@ function staticLoadPlaces() {
    ];
 }
 
+
 function renderPlaces(places) {
-   let scene = document.querySelector('a-scene');
+    let scene = document.querySelector('a-scene');
 
-   places.forEach((place) => {
-       let latitude = place.location.lat;
-       let longitude = place.location.lng;
+    places.forEach((place) => {
+        let latitude = place.location.lat;
+        let longitude = place.location.lng;
 
-       let model = document.createElement('a-entity');
-       model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-       model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
-       model.setAttribute('rotation', '0 180 0');
-       model.setAttribute('animation-mixer', '');
-       model.setAttribute('scale', '0.15 0.15 0.15');
+        // Create an entity
+        let entity = document.createElement('a-entity');
+        entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+        entity.setAttribute('rotation', '0 180 0');
+        entity.setAttribute('animation-mixer', '');
+        entity.setAttribute('scale', '0.15 0.15 0.15');
 
-       model.addEventListener('loaded', () => {
-           window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
-           console.log("Entity loaded");
-       });
+        // Load model manually using Three.js and set it on object3D
+        let loader = new THREE.GLTFLoader();
+        loader.load('./assets/magnemite/scene.gltf', function (gltf) {
+            entity.object3D.add(gltf.scene);
+            console.log('Model loaded via object3D');
+        });
 
-       scene.appendChild(model);
-   });
+        scene.appendChild(entity);
+    });
 }
+
+// function renderPlaces(places) {
+//    let scene = document.querySelector('a-scene');
+
+//    places.forEach((place) => {
+//        let latitude = place.location.lat;
+//        let longitude = place.location.lng;
+
+//        let model = document.createElement('a-entity');
+//        model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+//        model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
+//        model.setAttribute('rotation', '0 180 0');
+       
+//        model.setAttribute('scale', '0.15 0.15 0.15');
+
+//        model.addEventListener('loaded', () => {
+//            window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
+//            console.log("Entity loaded");
+//        });
+
+//        scene.appendChild(model);
+//    });
+// }
