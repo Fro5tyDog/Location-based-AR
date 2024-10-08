@@ -8,23 +8,21 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function initializeMyApp() {
-// Your custom JavaScript logic here
     let places = staticLoadPlaces();
     renderPlaces(places);
 }
 
 function staticLoadPlaces() {
-   return [
-       {
-           name: 'Magnemite',
-           location: {
-               lat: 1.3088672819001088,
-               lng: 103.84988767889077,
-           }
-       },
-   ];
+    return [
+        {
+            name: 'Magnemite',
+            location: {
+                lat: 1.3088672819001088,
+                lng: 103.84988767889077,
+            }
+        },
+    ];
 }
-
 
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
@@ -33,42 +31,34 @@ function renderPlaces(places) {
         let latitude = place.location.lat;
         let longitude = place.location.lng;
 
-        // Create an entity
-        let entity = document.createElement('a-entity');
-        entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-        entity.setAttribute('rotation', '0 180 0');
-        entity.setAttribute('scale', '0.15 0.15 0.15');
+        // Create the model entity
+        let model = document.createElement('a-entity');
+        model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
 
-        // Load model manually using Three.js and set it on object3D
-        let loader = new THREE.GLTFLoader();
-        loader.load('./assets/magnemite/scene.gltf', function (gltf) {
-            entity.object3D.add(gltf.scene);
-            console.log('Model loaded via object3D');
+        // Set the model's attributes after a slight delay
+        setTimeout(() => {
+            model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
+            model.setAttribute('rotation', '0 180 0');
+            model.setAttribute('animation-mixer', '');
+            model.setAttribute('scale', '0.15 0.15 0.15');
+        }, 100);
+
+        // Create and append the camera inside the model entity
+        let camera = document.createElement('a-camera');
+        camera.setAttribute('gps-camera', '');
+        camera.setAttribute('rotation-reader', '');
+
+        // Append the camera to the model entity
+        model.appendChild(camera);
+
+        // Event listener for when the model is fully loaded
+        model.addEventListener('loaded', () => {
+            window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'));
+            console.log('Entity and camera loaded');
         });
 
-        scene.appendChild(entity);
+        // Append the model to the scene
+        scene.appendChild(model);
     });
 }
 
-// function renderPlaces(places) {
-//    let scene = document.querySelector('a-scene');
-
-//    places.forEach((place) => {
-//        let latitude = place.location.lat;
-//        let longitude = place.location.lng;
-
-//        let model = document.createElement('a-entity');
-//        model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-//        model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
-//        model.setAttribute('rotation', '0 180 0');
-//        model.setAttribute('animation-mixer', '');
-//        model.setAttribute('scale', '0.15 0.15 0.15');
-
-//        model.addEventListener('loaded', () => {
-//            window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
-//            console.log("Entity loaded");
-//        });
-
-//        scene.appendChild(model);
-//    });
-// }
