@@ -65,31 +65,62 @@ function renderPlaces(places) {
         // Constantly check the player's distance and update visibility
         setInterval(() => {
             console.log('Checking player position...');
-            let playerPosition = getPlayerPosition();
-            let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
-            
-            console.log(`Distance to ${place.name}: ${distance}m`);
+            getPlayerPosition((playerPosition) => {
+                if (playerPosition) {
+                    let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
+                    console.log(`Distance to ${place.name}: ${distance}m`);
 
-            if (distance > visibilityRange.min && distance < visibilityRange.max) {
-                console.log(`${place.name} is within range, showing model.`);
-                model.setAttribute('visible', 'true'); // Show the model
-            } else {
-                console.log(`${place.name} is out of range, hiding model.`);
-                model.setAttribute('visible', 'false'); // Hide the model
-            }
+                    if (distance > visibilityRange.min && distance < visibilityRange.max) {
+                        console.log(`${place.name} is within range, showing model.`);
+                        model.setAttribute('visible', 'true'); // Show the model
+                    } else {
+                        console.log(`${place.name} is out of range, hiding model.`);
+                        model.setAttribute('visible', 'false'); // Hide the model
+                    }
+                } else {
+                    console.error('Player position could not be retrieved.');
+                }
+            });
         }, 1000); // Check every 1 second
     });
 }
 
 // Simulate getting the player's GPS position
-function getPlayerPosition() {
-    // You would replace this with actual GPS data in a real app
-    console.log('Fetching player position...');
-    return {
-        latitude: 1.307, // Simulated player lat
-        longitude: 103.850, // Simulated player lng
-    };
+// function getPlayerPosition() {
+//     // You would replace this with actual GPS data in a real app
+//     console.log('Fetching player position...');
+//     return {
+//         latitude: 1.307, // Simulated player lat
+//         longitude: 103.850, // Simulated player lng
+//     };
+// }
+
+// Fetch the player's actual GPS position
+function getPlayerPosition(callback) {
+    if ("geolocation" in navigator) {
+        console.log('Fetching player position using GPS...');
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                console.log(`Player's current position: Latitude: ${latitude}, Longitude: ${longitude}`);
+                callback({ latitude, longitude });
+            },
+            (error) => {
+                console.error('Error retrieving player position', error);
+                callback(null); // Handle error (e.g., no permission or GPS unavailable)
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 10000, // Cache position for 10 seconds
+                timeout: 5000 // Wait up to 5 seconds for a response
+            }
+        );
+    } else {
+        console.error('Geolocation not available in this browser.');
+        callback(null); // Handle case when Geolocation is not supported
+    }
 }
+
 
 // Function to calculate distance between two GPS coordinates (in meters)
 function calculateDistance(lat1, lng1, lat2, lng2) {
