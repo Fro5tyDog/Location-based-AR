@@ -55,6 +55,7 @@ function renderPlaces(places) {
         model.setAttribute('gltf-model', `${filePath}`);
         model.setAttribute('rotation', '0 0 0');
         model.setAttribute('animation-mixer', '');
+        model.setAttribute('look-at', '[gps-camera]')
         model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
         model.setAttribute('visible', 'false'); // Initially hidden
         
