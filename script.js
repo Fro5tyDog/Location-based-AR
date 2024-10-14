@@ -23,7 +23,7 @@ function staticLoadPlaces() {
                 lat: 1.3087085765187283,
                 lng: 103.85002403454892,
             },
-            visibilityRange: { min: 10, max: 100 }, // Appear when within 10-100m
+            visibilityRange: { min: 0, max: 100 }, // Appear when within 10-100m
         },
         {
             name: 'Dragonite',
