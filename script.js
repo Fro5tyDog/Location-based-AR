@@ -16,18 +16,20 @@ function staticLoadPlaces() {
         {
             name: 'Magnemite',
             filePath: './assets/magnemite/scene.gltf',
-            location: { // LTA 
+            location: { 
                 lat: 1.3087085765187283,
                 lng: 103.85002403454892,
-            }
+            },
+            visibilityRange: { min: 10, max: 100 }, // Appear when within 10-100m
         },
         {
             name: 'Dragonite',
             filePath: './assets/dragonite/scene.gltf',
-            location: { // Little India
+            location: { 
                 lat: 1.306656407996899,
                 lng: 103.85012141436107,
-            }
+            },
+            visibilityRange: { min: 10, max: 150 }, // Custom distance range
         },
     ];
 }
@@ -39,22 +41,52 @@ function renderPlaces(places) {
         let latitude = place.location.lat;
         let longitude = place.location.lng;
         let filePath = place.filePath;
-
+        let visibilityRange = place.visibilityRange; // Access visibility range
+        
         // Create a new entity for each place
         let model = document.createElement('a-entity');
-        model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
         model.setAttribute('gltf-model', `${filePath}`);
         model.setAttribute('rotation', '0 0 0');
         model.setAttribute('animation-mixer', '');
         model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
-
-        // Event listener for when the model is fully loaded
-        model.addEventListener('loaded', () => {
-            window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'));
-            console.log(`Model for ${place.name} loaded and added to scene`);
-        });
-
+        model.setAttribute('visible', 'false'); // Initially hidden
+        
         // Append the model to the scene
         scene.appendChild(model);
+
+        // Update visibility based on player's distance
+        model.setAttribute('gps-entity-place', {
+            latitude: latitude,
+            longitude: longitude,
+        });
+
+        model.addEventListener('gps-entity-place-update-position', (event) => {
+            let playerLat = event.detail.position.latitude;
+            let playerLng = event.detail.position.longitude;
+            let distance = calculateDistance(playerLat, playerLng, latitude, longitude);
+            
+            if (distance > visibilityRange.min && distance < visibilityRange.max) {
+                model.setAttribute('visible', 'true'); // Show the model
+            } else {
+                model.setAttribute('visible', 'false'); // Hide the model
+            }
+        });
     });
+}
+
+// Function to calculate distance between two GPS coordinates (in meters)
+function calculateDistance(lat1, lng1, lat2, lng2) {
+    const R = 6371e3; // Earth radius in meters
+    const phi1 = lat1 * Math.PI / 180;
+    const phi2 = lat2 * Math.PI / 180;
+    const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+    const deltaLambda = (lng2 - lng1) * Math.PI / 180;
+
+    const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+              Math.cos(phi1) * Math.cos(phi2) *
+              Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = R * c; // Distance in meters
+    return distance;
 }
