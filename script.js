@@ -7,11 +7,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function initializeMyApp() {
+    console.log('Initializing the app...');
     let places = staticLoadPlaces();
+    console.log('Places loaded: ', places);
     renderPlaces(places);
 }
 
 function staticLoadPlaces() {
+    console.log('Loading static places...');
     return [
         {
             name: 'Magnemite',
@@ -36,13 +39,16 @@ function staticLoadPlaces() {
 
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
-
+    console.log('Rendering places...');
+    
     places.forEach((place) => {
         let latitude = place.location.lat;
         let longitude = place.location.lng;
         let filePath = place.filePath;
-        let visibilityRange = place.visibilityRange; // Access visibility range
+        let visibilityRange = place.visibilityRange;
         
+        console.log(`Creating model for: ${place.name} at (${latitude}, ${longitude}) with visibility range [${visibilityRange.min}m - ${visibilityRange.max}m]`);
+
         // Create a new entity for each place
         let model = document.createElement('a-entity');
         model.setAttribute('gltf-model', `${filePath}`);
@@ -54,30 +60,38 @@ function renderPlaces(places) {
         // Append the model to the scene
         scene.appendChild(model);
 
-        // Update visibility based on player's distance
-        model.setAttribute('gps-entity-place', {
-            latitude: latitude,
-            longitude: longitude,
-        });
-
-        model.addEventListener('gps-entity-place-update-position', (event) => {
-            let playerLat = event.detail.position.latitude;
-            let playerLng = event.detail.position.longitude;
-            let distance = calculateDistance(playerLat, playerLng, latitude, longitude);
+        // Constantly check the player's distance and update visibility
+        setInterval(() => {
+            console.log('Checking player position...');
+            let playerPosition = getPlayerPosition();
+            let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
             
+            console.log(`Distance to ${place.name}: ${distance}m`);
+
             if (distance > visibilityRange.min && distance < visibilityRange.max) {
+                console.log(`${place.name} is within range, showing model.`);
                 model.setAttribute('visible', 'true'); // Show the model
-                console.log("Model is shown");
             } else {
+                console.log(`${place.name} is out of range, hiding model.`);
                 model.setAttribute('visible', 'false'); // Hide the model
-                console.log("Model is hidden");
             }
-        });
+        }, 1000); // Check every 1 second
     });
+}
+
+// Simulate getting the player's GPS position
+function getPlayerPosition() {
+    // You would replace this with actual GPS data in a real app
+    console.log('Fetching player position...');
+    return {
+        latitude: 1.307, // Simulated player lat
+        longitude: 103.850, // Simulated player lng
+    };
 }
 
 // Function to calculate distance between two GPS coordinates (in meters)
 function calculateDistance(lat1, lng1, lat2, lng2) {
+    console.log(`Calculating distance between (${lat1}, ${lng1}) and (${lat2}, ${lng2})`);
     const R = 6371e3; // Earth radius in meters
     const phi1 = lat1 * Math.PI / 180;
     const phi2 = lat2 * Math.PI / 180;
@@ -90,5 +104,6 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c; // Distance in meters
+    console.log(`Calculated distance: ${distance} meters`);
     return distance;
 }
