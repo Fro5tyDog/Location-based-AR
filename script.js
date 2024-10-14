@@ -67,8 +67,10 @@ function renderPlaces(places) {
             
             if (distance > visibilityRange.min && distance < visibilityRange.max) {
                 model.setAttribute('visible', 'true'); // Show the model
+                console.log("Model is shown");
             } else {
                 model.setAttribute('visible', 'false'); // Hide the model
+                console.log("Model is hidden");
             }
         });
     });
