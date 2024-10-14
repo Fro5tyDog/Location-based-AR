@@ -51,6 +51,7 @@ function renderPlaces(places) {
 
         // Create a new entity for each place
         let model = document.createElement('a-entity');
+        model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
         model.setAttribute('gltf-model', `${filePath}`);
         model.setAttribute('rotation', '0 0 0');
         model.setAttribute('animation-mixer', '');
