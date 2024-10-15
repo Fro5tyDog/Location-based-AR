@@ -7,7 +7,7 @@
     justify-content: space-between;
     padding: 0 20px;
     box-sizing: border-box;
-    z-index: 10; /* Make sure this is above the A-Frame scene */
+    z-index: 10; /* Ensure this is above the A-Frame scene */
     pointer-events: auto; /* Enable pointer events */
 }
 
@@ -33,6 +33,7 @@
     margin: 0 auto;
 }
 
+/* Styling for the text container */
 .text-container {
     position: fixed;
     display: flex;
@@ -42,7 +43,7 @@
     text-align: center;
     pointer-events: none; /* Ensure it's non-interactive */
     max-width: 100vw; /* Ensure it doesn't overflow the screen */
-    box-sizing: border-box; /* Make sure padding and borders are considered in width */
+    box-sizing: border-box; /* Consider padding and borders in width */
 }
 
 #closest-location {
@@ -54,28 +55,49 @@
     white-space: nowrap; /* Prevent text wrapping */
     overflow: hidden; /* Hide overflowing text */
     text-overflow: ellipsis; /* Add ellipsis if the text overflows */
-    max-width: 90vw; /* Limit the width of the text to prevent it from going off-screen */
+    max-width: 90vw; /* Limit text width to avoid going off-screen */
 }
 
+/* Media Queries for Mobile Devices */
+@media (max-width: 768px) {
+    .circle {
+        width: 40px;
+        height: 40px;
+    }
 
-/* .text-container {
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    top: 90px;
-    width: 100%;
-    text-align: center;
-    pointer-events: none;
+    .circle img {
+        width: 70%;
+    }
+
+    .text-container {
+        top: 80px; /* Adjust the position slightly */
+    }
+
+    #closest-location {
+        font-size: 16px; /* Adjust font size for mobile */
+        max-width: 85vw; /* Adjust max width for smaller screens */
+    }
 }
 
-#closest-location {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 2px 2px 4px black;
-    font-family: Arial, sans-serif;
-    white-space: normal; 
-} */
+@media (max-width: 480px) {
+    .circle {
+        width: 35px;
+        height: 35px;
+    }
+
+    .circle img {
+        width: 60%;
+    }
+
+    .text-container {
+        top: 70px; /* Adjust the position further for smaller devices */
+    }
+
+    #closest-location {
+        font-size: 14px; /* Further adjust font size */
+        max-width: 80vw; /* Further limit the max width */
+    }
+}
 
 /* Dropdown styling */
 .dropdown-container {
@@ -85,7 +107,7 @@
     left: 20px;
     flex-direction: column;
     gap: 10px;
-    z-index: 10; /* Make sure this is above the A-Frame scene */
+    z-index: 10; /* Ensure this is above the A-Frame scene */
     pointer-events: auto; /* Enable pointer events */
 }
 
