@@ -5,10 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const dropdownContainer = document.getElementById('dropdown-container');
     const topLeftCircle = document.getElementById('top-left-circle');
     const arrowElement = document.querySelector('.circle-center img'); // Target the arrow image
+    const locationText = document.getElementById('closest-location'); // Target the text below the arrow
     let dropdownVisible = false;
     let selectedIcon = null; // Track the currently selected icon
     let selectedModel = null; // Track the currently selected model
     let models = []; // To store the loaded models
+    let previousDistance = 0; // Track the previous distance for updating every 10 meters
     
     // Toggle dropdown visibility on click
     topLeftCircle.addEventListener('click', function () {
@@ -111,6 +113,27 @@ document.addEventListener('DOMContentLoaded', function () {
             );
             arrowElement.style.transform = `rotate(${bearing}deg)`; // Rotate the arrow
             console.log(`Arrow pointing to ${modelToTarget.name} at bearing: ${bearing} degrees`);
+
+            // Update the location text
+            updateLocationText(playerPosition, modelToTarget);
+        }
+    }
+
+    // Function to update the text with model name and distance
+    function updateLocationText(playerPosition, model) {
+        const distance = calculateDistance(
+            playerPosition.latitude,
+            playerPosition.longitude,
+            model.location.lat,
+            model.location.lng
+        );
+        
+        const roundedDistance = Math.floor(distance / 10) * 10; // Round to nearest 10 meters
+        
+        // Only update the text if the distance has changed by 1 meter
+        if (Math.abs(roundedDistance - previousDistance) >= 1) {
+            locationText.innerText = `Currently tracking: ${model.name} - ${roundedDistance} meters away.`;
+            previousDistance = roundedDistance;
         }
     }
 
@@ -123,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Player position could not be retrieved.');
             }
         });
-    }, 1000); // Update every second
+    }, 500); // Update every 500 milliseconds for faster responsiveness
 
     scene.addEventListener('loaded', function () {
         console.log('A-Frame scene fully initialized');
