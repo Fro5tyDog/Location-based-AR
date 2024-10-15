@@ -2,11 +2,57 @@ let intervalHandles = []; // Array to store interval handles for each entity
 
 document.addEventListener('DOMContentLoaded', function () {
     const scene = document.querySelector('a-scene');
+    const dropdownContainer = document.getElementById('dropdown-container');
+    const topLeftCircle = document.getElementById('top-left-circle');
+    let dropdownVisible = false;
+
+    // Toggle dropdown visibility on click
+    topLeftCircle.addEventListener('click', function () {
+        dropdownVisible = !dropdownVisible;
+        dropdownContainer.style.display = dropdownVisible ? 'flex' : 'none';
+    });
+
+    // Load model positions and create dropdown circles
+    fetch('./model_positions.json')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Model data loaded:', data);
+            createDropdownCircles(data);
+        })
+        .catch(error => {
+            console.error('Error loading the JSON data:', error);
+        });
+
+    function createDropdownCircles(models) {
+        models.forEach((model, index) => {
+            const circle = document.createElement('div');
+            circle.classList.add('dropdown-circle');
+
+            // Create an image element for the model
+            const img = document.createElement('img');
+            img.src = `./assets/model_Icons/${model.name.toLowerCase()}/icon.png`; // Assume icons follow model naming
+            img.alt = model.name;
+            
+            // Append image to the circle
+            circle.appendChild(img);
+
+            // Add event listener to select model
+            circle.addEventListener('click', function () {
+                console.log(`Selected model: ${model.name}`);
+                // Implement model focus logic here (e.g., update arrow direction)
+            });
+
+            // Append the circle to the dropdown container
+            dropdownContainer.appendChild(circle);
+        });
+    }
+
     scene.addEventListener('loaded', function () {
         console.log('A-Frame scene fully initialized');
         initializeMyApp();
     });
 });  
+
 
 function initializeMyApp() {
     console.log('Initializing the app...');

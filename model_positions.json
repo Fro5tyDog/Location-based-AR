@@ -1,6 +1,6 @@
 [
   {
-    "name": "Magnemite",
+    "name": "magnemite",
     "filePath": "./assets/magnemite/scene.gltf",
     "location": {
       "lat": 1.308626683108172,
@@ -12,7 +12,7 @@
     }
   },
   {
-    "name": "Dragonite",
+    "name": "dragonite",
     "filePath": "./assets/dragonite/scene.gltf",
     "location": {
       "lat": 1.3085665879783313,
