@@ -14,45 +14,6 @@
 <script src="script.js"></script>
 
 <body style='margin: 0; overflow: hidden;'>  
-    <!-- Dropdown, buttons, and display area for position -->
-    <div style="position: absolute; top: 10px; left: 10px; z-index: 999;">
-        <label for="model-select">Choose a 3D model:</label>
-        <select id="model-select">
-            <!-- Options will be dynamically loaded here -->
-        </select>
-        <button id="confirm-model-btn">Confirm Model</button>
-        <br><br>
-        <button id="capture-position-btn">Capture Position</button>
-        <button id="save-position-btn" disabled>Save Position</button>
-
-        <!-- Inputs for specifying min and max distance -->
-        <label for="min-distance">Min Distance (meters):</label>
-        <input type="number" id="min-distance" placeholder="Default: 10m" value=10>  
-        <button id="set-min-distance-btn">Set Min Distance</button>
-        <br><br>
-
-        <label for="max-distance">Max Distance (meters):</label>
-        <input type="number" id="max-distance" placeholder="Default: 150m" value=150>
-        <button id="set-max-distance-btn">Set Max Distance</button>
-        <br><br>
-
-        <!-- New save button for min/max distance -->
-        <button id="save-min-max-distance-btn" disabled>Save Min/Max Distance</button>
-        <br><br>
-
-        <button id="download-data-btn">Download Data</button>
-        <button id="test-button" disabled>Test</button> <!-- Test button disabled initially -->
-        <br><br>
-        <!-- Div to display the captured position -->
-        <div id="position-display" style="font-size: 14px; color: #000;">
-            Position will be displayed here.
-        </div>
-
-        <!-- New div to display min and max distances -->
-        <div id="distance-display" style="font-size: 14px; color: #000;">
-            Min and Max distances will be displayed here.
-        </div>
-    </div>
   
     <a-scene
         vr-mode-ui="enabled: false"

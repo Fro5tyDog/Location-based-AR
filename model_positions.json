@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Magnemite",
+    "filePath": "./assets/magnemite/scene.gltf",
+    "location": {
+      "lat": 1.308626683108172,
+      "lng": 103.85004662847754
+    },
+    "visibilityRange": {
+      "min": 0,
+      "max": 150
+    }
+  },
+  {
+    "name": "Dragonite",
+    "filePath": "./assets/dragonite/scene.gltf",
+    "location": {
+      "lat": 1.3085665879783313,
+      "lng": 103.84999419572192
+    },
+    "visibilityRange": {
+      "min": 0,
+      "max": 150
+    }
+  }
+]
