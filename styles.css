@@ -61,18 +61,21 @@
     pointer-events: auto; /* Enable pointer events */
 }
 
+/* Default style for dropdown circles */
 .dropdown-circle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: white;
+    background-color: white; /* Default is white */
     border: 2px solid black;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
-.dropdown-circle img {
-    width: 80%;
-    height: auto;
+/* Selected state */
+.dropdown-circle.selected {
+    background-color: green; /* Selected turns green */
 }
+
