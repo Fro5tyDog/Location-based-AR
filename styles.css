@@ -7,6 +7,8 @@
     justify-content: space-between;
     padding: 0 20px;
     box-sizing: border-box;
+    z-index: 10; /* Make sure this is above the A-Frame scene */
+    pointer-events: auto; /* Enable pointer events */
 }
 
 .circle {
@@ -19,6 +21,7 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    pointer-events: auto; /* Ensure the circles can receive pointer events */
 }
 
 .circle img {
@@ -50,11 +53,12 @@
 .dropdown-container {
     display: none; /* Hidden by default */
     position: fixed;
-    top: 80px; /* Space below the top-left circle */
-    left: 20px; /* Align with the top-left circle */
-    /* display: flex; */
+    top: 80px;
+    left: 20px;
     flex-direction: column;
-    gap: 10px; /* Space between dropdown circles */
+    gap: 10px;
+    z-index: 10; /* Make sure this is above the A-Frame scene */
+    pointer-events: auto; /* Enable pointer events */
 }
 
 .dropdown-circle {
