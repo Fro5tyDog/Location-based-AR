@@ -71,18 +71,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function initializeMyApp() {
     console.log('Initializing the app...');
+
     // Fetch the model positions from the JSON file
     fetch('./model_positions.json')  // Update with the correct path to your JSON file
         .then(response => response.json())
         .then(data => {
             console.log('Places loaded: ', data);
+            getPlayerPosition((playerPosition) => {
+                if (playerPosition) {
+                    const closestModel = getClosestModel(playerPosition, data);
+                    // Update the text with the closest model's name
+                    const locationText = document.getElementById('closest-location');
+                    locationText.innerHTML = `Closest to ${closestModel.name}`;
+                    console.log(`Closest model is: ${closestModel.name}`);
+                }
+            });
             renderPlaces(data);  // Pass the fetched data to renderPlaces
         })
         .catch(error => {
             console.error('Error loading the JSON data:', error);
         });
-    
 }
+
+// Function to get the closest model to the player's current location
+function getClosestModel(playerPosition, models) {
+    let closestModel = null;
+    let shortestDistance = Infinity;
+
+    models.forEach(model => {
+        const distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, model.location.lat, model.location.lng);
+        if (distance < shortestDistance) {
+            shortestDistance = distance;
+            closestModel = model;
+        }
+    });
+
+    return closestModel;
+}
+
+
+// function initializeMyApp() {
+//     console.log('Initializing the app...');
+//     // Fetch the model positions from the JSON file
+//     fetch('./model_positions.json')  // Update with the correct path to your JSON file
+//         .then(response => response.json())
+//         .then(data => {
+//             console.log('Places loaded: ', data);
+//             renderPlaces(data);  // Pass the fetched data to renderPlaces
+//         })
+//         .catch(error => {
+//             console.error('Error loading the JSON data:', error);
+//         });
+    
+// }
   
 
 function renderPlaces(places) {
