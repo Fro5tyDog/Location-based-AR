@@ -3,6 +3,13 @@ let intervalHandles = []; // Array to store interval handles for each entity
 document.addEventListener('DOMContentLoaded', function () {
     const scene = document.querySelector('a-scene');
     const dropdownContainer = document.getElementById('dropdown-container');
+
+    // Force reflow for dropdown to ensure icons show on load
+    dropdownContainer.style.display = 'block';
+    setTimeout(() => {
+        dropdownContainer.style.display = 'none'; // Hide again as it's meant to be hidden initially
+    }, 50);
+
     const topLeftCircle = document.getElementById('top-left-circle');
     const arrowElement = document.querySelector('.circle-center img'); // Target the arrow image
     const locationText = document.getElementById('closest-location'); // Target the text below the arrow
@@ -130,11 +137,11 @@ document.addEventListener('DOMContentLoaded', function () {
         
         const roundedDistance = Math.floor(distance / 10) * 10; // Round to nearest 10 meters
         
-        // Only update the text if the distance has changed by 1 meter
-        if (Math.abs(roundedDistance - previousDistance) >= 1) {
-            locationText.innerHTML = `Currently tracking: ${model.name} - ${roundedDistance} meters away.`;
+        // Only update the text if the distance has changed by 10 meters
+        if (Math.abs(roundedDistance - previousDistance) >= 10) {
+            locationText.innerText = `Currently tracking: ${model.name} - ${roundedDistance} meters away.`;
             previousDistance = roundedDistance;
-        }  
+        }
     }
 
     // Constantly check the player's position and update the arrow direction

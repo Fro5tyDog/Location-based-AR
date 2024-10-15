@@ -34,9 +34,9 @@
 }
 
 /* Styling for the text below the middle circle */
-.text-container {
+/* .text-container {
     position: fixed;
-    top: 90px; /* Adjust this value as needed to space text below the middle circle */
+    top: 90px; 
     width: 100%;
     text-align: center;
 }
@@ -44,9 +44,26 @@
 #closest-location {
     font-size: 2rem;
     font-weight: bold;
-    color: white; /* Text color */
-    text-shadow: 2px 2px 4px black; /* Outline effect for better readability */
+    color: white; 
+    text-shadow: 2px 2px 4px black; 
     font-family: Arial, sans-serif;
+} */
+
+.text-container {
+    position: fixed;
+    top: 90px;
+    width: 100%;
+    text-align: center;
+    pointer-events: none; /* Ensures it's not interactive */
+}
+
+#closest-location {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+    font-family: Arial, sans-serif;
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
 /* Dropdown styling */
