@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         // Only update the text if the distance has changed by 1 meter
         if (Math.abs(roundedDistance - previousDistance) >= 1) {
-            locationText.innerText = `Currently tracking: ${model.name} - ${roundedDistance} meters away.`;
+            locationText.innerHTML = `Currently tracking: ${model.name} - ${roundedDistance} meters away.`;
             previousDistance = roundedDistance;
         }  
     }
