@@ -36,6 +36,7 @@
 .text-container {
     position: fixed;
     display: flex;
+    justify-content: center;
     top: 90px;
     width: 100%;
     text-align: center;
