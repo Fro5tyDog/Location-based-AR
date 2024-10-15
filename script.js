@@ -8,41 +8,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });  
 
-let selectedModel = null; // Store the confirmed 3D model
-let modelPositions = {};  // Store the captured position for each model
-let modelDistances = {}; // New: Store distance settings
-let places = staticLoadPlaces();  // Store original places (objects)
-
 function initializeMyApp() {
     console.log('Initializing the app...');
-    console.log('Places loaded: ', places);
-    renderPlaces(places);
+
+    console.log('Initializing the app...');
+
+    // Fetch the model positions from the JSON file
+    fetch('./model_positions.json')  // Update with the correct path to your JSON file
+        .then(response => response.json())
+        .then(data => {
+            console.log('Places loaded: ', data);
+            renderPlaces(data);  // Pass the fetched data to renderPlaces
+        })
+        .catch(error => {
+            console.error('Error loading the JSON data:', error);
+        });
+    
 }
 
-
-function staticLoadPlaces() {
-    console.log('Loading static places...');
-    return [
-        {
-            name: 'Magnemite',
-            filePath: './assets/magnemite/scene.gltf',
-            location: { 
-                lat: 1.3087085765187283,
-                lng: 103.85002403454892,
-            },
-            visibilityRange: { min: 0, max: 100 }, // Appear when within 10-100m
-        },
-        {
-            name: 'Dragonite',
-            filePath: './assets/dragonite/scene.gltf',
-            location: { 
-                lat: 1.306656407996899,
-                lng: 103.85012141436107,
-            },
-            visibilityRange: { min: 10, max: 150 }, // Custom distance range
-        },
-    ];
-}
 
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
