@@ -52,16 +52,17 @@ function initializeMyApp() {
 //     ];
 // }
 
+
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
     console.log('Rendering places...');
-    
+
     places.forEach((place) => {
         let latitude = place.location.lat;
         let longitude = place.location.lng;
         let filePath = place.filePath;
         let visibilityRange = place.visibilityRange;
-        
+
         console.log(`Creating model for: ${place.name} at (${latitude}, ${longitude}) with visibility range [${visibilityRange.min}m - ${visibilityRange.max}m]`);
 
         // Create a new entity for each place
@@ -73,31 +74,30 @@ function renderPlaces(places) {
         model.setAttribute('look-at', '[gps-camera]');
         model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
         model.setAttribute('visible', 'false'); // Initially hidden
-        // let model = document.createElement('a-entity');
-        // model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-        // model.setAttribute('gltf-model', `${filePath}`);
-        // model.setAttribute('rotation', '0 0 0');
-        // model.setAttribute('animation-mixer', '');
-        // model.setAttribute('look-at', '[gps-camera]')
-        // model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
-        // model.setAttribute('visible', 'false'); // Initially hidden
-        
+
+        // Wait for the model to fully load before making it visible
+        model.addEventListener('model-loaded', () => {
+            console.log(`${place.name} model loaded, now visible.`);
+            model.setAttribute('visible', 'true');
+        });
+
         // Append the model to the scene
         scene.appendChild(model);
 
-        // Constantly check the player's distance and update visibility
-        setInterval(() => {
+        // Set up an interval to constantly check the player's distance and update visibility
+        let intervalId = setInterval(() => {
             console.log('Checking player position...');
             getPlayerPosition((playerPosition) => {
                 if (playerPosition) {
                     let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
                     console.log(`Distance to ${place.name}: ${distance}m`);
 
+                    // Check if the player is within the visibility range
                     if (distance > visibilityRange.min && distance < visibilityRange.max) {
                         console.log(`${place.name} is within range, showing model.`);
                         model.setAttribute('visible', 'true'); // Show the model
                     } else {
-                        console.log(`${place.name} is out of range, hiding model.`);
+                        console.log(`${place.name} is out of range or too close, hiding model.`);
                         model.setAttribute('visible', 'false'); // Hide the model
                     }
                 } else {
@@ -105,9 +105,11 @@ function renderPlaces(places) {
                 }
             });
         }, 1000); // Check every 1 second
+
+        // Store the interval handle so we can clear it later
+        intervalHandles.push(intervalId);
     });
 }
-
 
 // Fetch the player's actual GPS position
 function getPlayerPosition(callback) {
