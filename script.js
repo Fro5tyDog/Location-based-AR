@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (Math.abs(roundedDistance - previousDistance) >= 1) {
             locationText.innerText = `Currently tracking: ${model.name} - ${roundedDistance} meters away.`;
             previousDistance = roundedDistance;
-        }
+        }  
     }
 
     // Constantly check the player's position and update the arrow direction
