@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     function createDropdownCircles(models) {
-        models.forEach((model, index) => {
+        models.forEach((model) => {
             const circle = document.createElement('div');
             circle.classList.add('dropdown-circle');
 
@@ -37,10 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // Append image to the circle
             circle.appendChild(img);
 
-            // Add event listener to select model
+            // Add event listener to select or de-select model
             circle.addEventListener('click', function () {
-                console.log(`Selected model: ${model.name}`);
-                // Implement model focus logic here (e.g., update arrow direction)
                 if (circle === selectedIcon) {
                     // Deselect if the same icon is clicked again
                     circle.classList.remove('selected');
@@ -67,7 +65,8 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('A-Frame scene fully initialized');
         initializeMyApp();
     });
-});  
+});
+ 
 
 
 function initializeMyApp() {
