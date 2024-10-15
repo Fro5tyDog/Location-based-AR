@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const scene = document.querySelector('a-scene');
     const dropdownContainer = document.getElementById('dropdown-container');
     const topLeftCircle = document.getElementById('top-left-circle');
+    const arrowElement = document.querySelector('.circle-center img'); // Target the arrow image
     let dropdownVisible = false;
     let selectedIcon = null; // Track the currently selected icon
-
+    let selectedModel = null; // Track the currently selected model
+    let models = []; // To store the loaded models
+    
     // Toggle dropdown visibility on click
     topLeftCircle.addEventListener('click', function () {
         dropdownVisible = !dropdownVisible;
@@ -17,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('./model_positions.json')
         .then(response => response.json())
         .then(data => {
+            models = data;
             console.log('Model data loaded:', data);
             createDropdownCircles(data);
         })
@@ -25,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     function createDropdownCircles(models) {
-        models.forEach((model, index) => {
+        models.forEach((model) => {
             const circle = document.createElement('div');
             circle.classList.add('dropdown-circle');
 
@@ -37,13 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // Append image to the circle
             circle.appendChild(img);
 
-            // Add event listener to select model
+            // Add event listener to select or de-select model
             circle.addEventListener('click', function () {
-                // Implement model focus logic here (e.g., update arrow direction)
                 if (circle === selectedIcon) {
                     // Deselect if the same icon is clicked again
                     circle.classList.remove('selected');
                     selectedIcon = null;
+                    selectedModel = null;
                     console.log(`Deselected model: ${model.name}`);
                 } else {
                     // Deselect the previous icon, if any
@@ -53,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Select the new icon
                     circle.classList.add('selected');
                     selectedIcon = circle;
+                    selectedModel = model; // Set the selected model
                     console.log(`Selected model: ${model.name}`);
                 }
             });
@@ -62,11 +67,70 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Function to calculate bearing (direction) between two coordinates
+    function calculateBearing(lat1, lng1, lat2, lng2) {
+        const toRadians = (deg) => deg * Math.PI / 180;
+        const toDegrees = (rad) => rad * 180 / Math.PI;
+
+        const phi1 = toRadians(lat1);
+        const phi2 = toRadians(lat2);
+        const deltaLambda = toRadians(lng2 - lng1);
+
+        const y = Math.sin(deltaLambda) * Math.cos(phi2);
+        const x = Math.cos(phi1) * Math.sin(phi2) -
+                Math.sin(phi1) * Math.cos(phi2) * Math.cos(deltaLambda);
+        const bearing = toDegrees(Math.atan2(y, x));
+        return (bearing + 360) % 360; // Normalize to 0-360 degrees
+    }
+
+    // Function to get the closest model to the player's current location
+    function getClosestModel(playerPosition) {
+        let closestModel = null;
+        let shortestDistance = Infinity;
+
+        models.forEach(model => {
+            const distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, model.location.lat, model.location.lng);
+            if (distance < shortestDistance) {
+                shortestDistance = distance;
+                closestModel = model;
+            }
+        });
+
+        return closestModel;
+    }
+
+    // Function to update the arrow direction
+    function updateArrowDirection(playerPosition) {
+        const modelToTarget = selectedModel || getClosestModel(playerPosition);
+        if (modelToTarget) {
+            const bearing = calculateBearing(
+                playerPosition.latitude,
+                playerPosition.longitude,
+                modelToTarget.location.lat,
+                modelToTarget.location.lng
+            );
+            arrowElement.style.transform = `rotate(${bearing}deg)`; // Rotate the arrow
+            console.log(`Arrow pointing to ${modelToTarget.name} at bearing: ${bearing} degrees`);
+        }
+    }
+
+    // Constantly check the player's position and update the arrow direction
+    setInterval(() => {
+        getPlayerPosition((playerPosition) => {
+            if (playerPosition) {
+                updateArrowDirection(playerPosition);
+            } else {
+                console.error('Player position could not be retrieved.');
+            }
+        });
+    }, 1000); // Update every second
+
     scene.addEventListener('loaded', function () {
         console.log('A-Frame scene fully initialized');
         initializeMyApp();
     });
-});  
+});
+
 
 
 function initializeMyApp() {
