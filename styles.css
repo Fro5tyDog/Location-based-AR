@@ -36,7 +36,7 @@
 .text-container {
     position: fixed;
     top: 90px;
-    width: 33%;
+    width: 100%;
     text-align: center;
     pointer-events: none; /* Ensures it's not interactive */
 }
@@ -47,7 +47,7 @@
     color: white;
     text-shadow: 2px 2px 4px black;
     font-family: Arial, sans-serif;
-    white-space: wrap; /* Prevent text wrapping */
+    white-space: normal; /* text wrapping */
 }
 
 /* Dropdown styling */
