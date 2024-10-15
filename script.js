@@ -71,9 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function initializeMyApp() {
     console.log('Initializing the app...');
-
-    console.log('Initializing the app...');
-
     // Fetch the model positions from the JSON file
     fetch('./model_positions.json')  // Update with the correct path to your JSON file
         .then(response => response.json())
