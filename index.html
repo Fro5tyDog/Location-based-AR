@@ -9,11 +9,18 @@
     <script type="text/javascript" src="https://www.unpkg.com/@ar-js-org/ar.js@3.4.5/aframe/build/aframe-ar.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>  
 
 <script src="script.js"></script>
 
 <body style='margin: 0; overflow: hidden;'>  
+
+    <div class="circle-container">
+        <div class="circle"></div> <!-- Left Circle -->
+        <div class="circle circle-center"></div> <!-- Center Circle -->
+        <div class="circle"></div> <!-- Right Circle -->
+    </div>
     
     <a-scene
         vr-mode-ui="enabled: false"
