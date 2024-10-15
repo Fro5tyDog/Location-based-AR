@@ -37,6 +37,8 @@
     position: fixed;
     top: 90px;
     width: 100%;
+    display: flex;
+    justify-content: center;
     text-align: center;
     pointer-events: none; /* Ensure it's non-interactive */
     max-width: 100vw; /* Ensure it doesn't overflow the screen */
