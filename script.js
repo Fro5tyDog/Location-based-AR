@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const dropdownContainer = document.getElementById('dropdown-container');
     const topLeftCircle = document.getElementById('top-left-circle');
     let dropdownVisible = false;
+    let selectedIcon = null; // Track the currently selected icon
 
     // Toggle dropdown visibility on click
     topLeftCircle.addEventListener('click', function () {
@@ -40,6 +41,21 @@ document.addEventListener('DOMContentLoaded', function () {
             circle.addEventListener('click', function () {
                 console.log(`Selected model: ${model.name}`);
                 // Implement model focus logic here (e.g., update arrow direction)
+                if (circle === selectedIcon) {
+                    // Deselect if the same icon is clicked again
+                    circle.classList.remove('selected');
+                    selectedIcon = null;
+                    console.log(`Deselected model: ${model.name}`);
+                } else {
+                    // Deselect the previous icon, if any
+                    if (selectedIcon) {
+                        selectedIcon.classList.remove('selected');
+                    }
+                    // Select the new icon
+                    circle.classList.add('selected');
+                    selectedIcon = circle;
+                    console.log(`Selected model: ${model.name}`);
+                }
             });
 
             // Append the circle to the dropdown container
