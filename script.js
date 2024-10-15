@@ -82,9 +82,6 @@ function initializeMyApp() {
                     const closestModel = getClosestModel(playerPosition, data);
                     // Update the text with the closest model's name
                     const locationText = document.getElementById('closest-location');
-                    locationText.innerHTML = `Closest to ${closestModel.name}`;
-                    locationText.style.justifyContent = 'center';
-                    locationText.style.textAlign = 'center';
                     console.log(`Closest model is: ${closestModel.name}`);
                 }
             });
