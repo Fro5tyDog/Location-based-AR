@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Add event listener to select model
             circle.addEventListener('click', function () {
-                console.log(`Selected model: ${model.name}`);
                 // Implement model focus logic here (e.g., update arrow direction)
                 if (circle === selectedIcon) {
                     // Deselect if the same icon is clicked again
