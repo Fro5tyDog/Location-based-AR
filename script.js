@@ -69,10 +69,18 @@ function renderPlaces(places) {
         model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
         model.setAttribute('gltf-model', `${filePath}`);
         model.setAttribute('rotation', '0 0 0');
-        model.setAttribute('animation-mixer', '');
-        model.setAttribute('look-at', '[gps-camera]')
+        model.setAttribute('animation-mixer', 'clip: *; loop: repeat; timeScale: 1.1; clampWhenFinished: true; crossFadeDuration: 0.3');
+        model.setAttribute('look-at', '[gps-camera]');
         model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
         model.setAttribute('visible', 'false'); // Initially hidden
+        // let model = document.createElement('a-entity');
+        // model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+        // model.setAttribute('gltf-model', `${filePath}`);
+        // model.setAttribute('rotation', '0 0 0');
+        // model.setAttribute('animation-mixer', '');
+        // model.setAttribute('look-at', '[gps-camera]')
+        // model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
+        // model.setAttribute('visible', 'false'); // Initially hidden
         
         // Append the model to the scene
         scene.appendChild(model);
