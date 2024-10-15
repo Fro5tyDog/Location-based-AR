@@ -33,26 +33,10 @@
     margin: 0 auto;
 }
 
-/* Styling for the text below the middle circle */
-/* .text-container {
-    position: fixed;
-    top: 90px; 
-    width: 100%;
-    text-align: center;
-}
-
-#closest-location {
-    font-size: 2rem;
-    font-weight: bold;
-    color: white; 
-    text-shadow: 2px 2px 4px black; 
-    font-family: Arial, sans-serif;
-} */
-
 .text-container {
     position: fixed;
     top: 90px;
-    width: 100%;
+    width: 33%;
     text-align: center;
     pointer-events: none; /* Ensures it's not interactive */
 }
@@ -63,7 +47,7 @@
     color: white;
     text-shadow: 2px 2px 4px black;
     font-family: Arial, sans-serif;
-    white-space: nowrap; /* Prevent text wrapping */
+    white-space: wrap; /* Prevent text wrapping */
 }
 
 /* Dropdown styling */
