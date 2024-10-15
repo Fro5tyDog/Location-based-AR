@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Create an image element for the model
             const img = document.createElement('img');
-            img.src = `./assets/model_Icons/${model.name.toLowerCase()}/icon.png`; // Assume icons follow model naming
+            img.src = `./assets/model_Icons/${model.name.toLowerCase()}.png`; // Assume icons follow model naming
             img.alt = model.name;
             
             // Append image to the circle
