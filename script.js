@@ -177,7 +177,7 @@ function renderPlaces(places) {
                     console.error('Player position could not be retrieved.');
                 }
             });
-        }, 1000); // Check every 1 second
+        }, 30000); // Check every 30 seconds to hide/reveal the model
 
         // Store the interval handle so we can clear it later
         intervalHandles.push(intervalId);
