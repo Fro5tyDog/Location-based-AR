@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const dropdownContainer = document.getElementById('dropdown-container');
     const topLeftCircle = document.getElementById('top-left-circle');
     let dropdownVisible = false;
-    let selectedIcon = null; // Track the currently selected icon
 
     // Toggle dropdown visibility on click
     topLeftCircle.addEventListener('click', function () {
@@ -108,6 +107,7 @@ function getClosestModel(playerPosition, models) {
   
 
 function renderPlaces(places) {
+    let selectedIcon = null; // Track the currently selected icon
     let scene = document.querySelector('a-scene');
     console.log('Rendering places...');
 
@@ -140,30 +140,6 @@ function renderPlaces(places) {
         scene.appendChild(model);
         // Start the continuous checking process
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
-        // Set up an interval to constantly check the player's distance and update visibility
-        // let intervalId = setInterval(() => {
-        //     console.log('Checking player position...');
-        //     getPlayerPosition((playerPosition) => {
-        //         if (playerPosition) {
-        //             let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
-        //             console.log(`Distance to ${place.name}: ${distance}m`);
-
-        //             // Check if the player is within the visibility range
-        //             if (distance > visibilityRange.min && distance < visibilityRange.max) {
-        //                 console.log(`${place.name} is within range, showing model.`);
-        //                 model.setAttribute('visible', 'true'); // Show the model
-        //             } else {
-        //                 console.log(`${place.name} is out of range or too close, hiding model.`);
-        //                 model.setAttribute('visible', 'false'); // Hide the model
-        //             }
-        //         } else {
-        //             console.error('Player position could not be retrieved.');
-        //         }
-        //     });
-        // }, 30000); // Check every 30 seconds to hide/reveal the model
-
-        // Store the interval handle so we can clear it later
-        // intervalHandles.push(intervalId);
 
         const circles = document.querySelectorAll('.dropdown-circle');
         circles.forEach((circle) => {
