@@ -136,6 +136,7 @@ function renderPlaces(places) {
         let longitude = place.location.lng;
         let filePath = place.filePath;
         let visibilityRange = place.visibilityRange;
+        let name = place.name;
 
         console.log(`Creating model for: ${place.name} at (${latitude}, ${longitude}) with visibility range [${visibilityRange.min}m - ${visibilityRange.max}m]`);
 
@@ -158,7 +159,7 @@ function renderPlaces(places) {
         // Append the model to the scene
         scene.appendChild(model);
         // Start the continuous checking process
-        updateModelVisibility(places, model);
+        updateModelVisibility(name, model, latitude, longitude, visibilityRange);
         // Set up an interval to constantly check the player's distance and update visibility
         // let intervalId = setInterval(() => {
         //     console.log('Checking player position...');
@@ -193,34 +194,29 @@ function renderPlaces(places) {
 //     intervalHandles = []; // Clear the stored handles
 // }
 
-function updateModelVisibility(places, model) {
-    places.forEach((place) => {
-        let latitude = place.location.lat;
-        let longitude = place.location.lng;
-        let visibilityRange = place.visibilityRange;
+function updateModelVisibility(name, model, latitude, longitude, visibilityRange) {
     
-        console.log('Checking player position...');
-        getPlayerPosition((playerPosition) => {
-            if (playerPosition) {
-                let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
-                console.log(`Distance to ${place.name}: ${distance}m`);
+    console.log('Checking player position...');
+    getPlayerPosition((playerPosition) => {
+        if (playerPosition) {
+            let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
+            console.log(`Distance to ${name}: ${distance}m`);
 
-                // Check if the player is within the visibility range
-                if (distance > visibilityRange.min && distance < visibilityRange.max) {
-                    console.log(`${place.name} is within range, showing model.`);
-                    model.setAttribute('visible', 'true'); // Show the model
-                } else {
-                    console.log(`${place.name} is out of range or too close, hiding model.`);
-                    model.setAttribute('visible', 'false'); // Hide the model
-                }
+            // Check if the player is within the visibility range
+            if (distance > visibilityRange.min && distance < visibilityRange.max) {
+                console.log(`${name} is within range, showing model.`);
+                model.setAttribute('visible', 'true'); // Show the model
             } else {
-                console.error('Player position could not be retrieved.');
+                console.log(`${name} is out of range or too close, hiding model.`);
+                model.setAttribute('visible', 'false'); // Hide the model
             }
-        });
+        } else {
+            console.error('Player position could not be retrieved.');
+        }
+    });
 
-        // Use requestAnimationFrame for continuous updates
-        requestAnimationFrame(updateModelVisibility);
-    })
+    // Use requestAnimationFrame for continuous updates
+    requestAnimationFrame(updateModelVisibility);
 }
 
 // Start the continuous checking process
