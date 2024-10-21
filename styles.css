@@ -31,6 +31,21 @@
 
 .circle-center {
     margin: 0 auto;
+    background-color: #0ee85e;
+}
+
+.arrow {
+    position: absolute;
+    width: 13.5vw; /* Adjust the width and height as needed */
+    height: 13.5vw;
+    top: 42.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url("https://p9n2c8y2.rocketcdn.me/wp-content/uploads/2021/05/24.png.webp")
+        center no-repeat;
+    background-size: 115% 115%;
+    z-index: 2000;
+    position: relative;
 }
 
 
