@@ -1,8 +1,4 @@
 let intervalHandles = []; // Array to store interval handles for each entity
-let current = { latitude: null, longitude: null };
-let target = { latitude: 1.308626683108172, longitude: 103.85004662847754 }; // Default target to "magnemite"
-let lastAlpha = 0;
-let direction = 0;
 
 document.addEventListener('DOMContentLoaded', function () {
     const scene = document.querySelector('a-scene');
@@ -23,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             console.log('Model data loaded:', data);
             createDropdownCircles(data);
-            setDefaultTarget(data); // Set default target to the first model
         })
         .catch(error => {
             console.error('Error loading the JSON data:', error);
@@ -44,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Add event listener to select model
             circle.addEventListener('click', function () {
+                // Implement model focus logic here (e.g., update arrow direction)
                 if (circle === selectedIcon) {
                     // Deselect if the same icon is clicked again
                     circle.classList.remove('selected');
@@ -54,14 +50,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (selectedIcon) {
                         selectedIcon.classList.remove('selected');
                     }
-                    // Select the new icon and update target
+                    // Select the new icon
                     circle.classList.add('selected');
                     selectedIcon = circle;
                     console.log(`Selected model: ${model.name}`);
-
-                    // Update the target to point to the selected model's coordinates
-                    target.latitude = model.location.lat;
-                    target.longitude = model.location.lng;
                 }
             });
 
@@ -70,20 +62,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Set the default target to the first model in the JSON data
-    function setDefaultTarget(models) {
-        if (models.length > 0) {
-            target.latitude = models[0].location.lat;
-            target.longitude = models[0].location.lng;
-            console.log(`Default target set to ${models[0].name} at (${target.latitude}, ${target.longitude})`);
-        }
-    }
-
     scene.addEventListener('loaded', function () {
         console.log('A-Frame scene fully initialized');
         initializeMyApp();
     });
 });  
+
 
 function initializeMyApp() {
     console.log('Initializing the app...');
@@ -107,48 +91,9 @@ function initializeMyApp() {
         .catch(error => {
             console.error('Error loading the JSON data:', error);
         });
-
-    // Start geolocation and compass
-    navigator.geolocation.watchPosition(setCurrentPosition, null, { enableHighAccuracy: true });
-    if (!navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
-        window.addEventListener("deviceorientationabsolute", runCalculation);
-    }
-
-    updateUI();
 }
 
-function setCurrentPosition(position) {
-    current.latitude = position.coords.latitude;
-    current.longitude = position.coords.longitude;
-}
-
-function runCalculation(event) {
-    var alpha = Math.abs(360 - event.webkitCompassHeading) || event.alpha;
-    if (alpha == null || Math.abs(alpha - lastAlpha) > 1) {
-        var lat1 = current.latitude * (Math.PI / 180);
-        var lon1 = current.longitude * (Math.PI / 180);
-        var lat2 = target.latitude * (Math.PI / 180);
-        var lon2 = target.longitude * (Math.PI / 180);
-
-        // calculate compass direction
-        var y = Math.sin(lon2 - lon1) * Math.cos(lat2);
-        var x = Math.cos(lat1) * Math.sin(lat2) -
-            Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-        var bearing = Math.atan2(y, x) * (180 / Math.PI);
-
-        direction = (alpha + bearing + 360) % 360;
-        direction = direction.toFixed(0);
-
-        lastAlpha = alpha;
-    }
-}
-
-function updateUI() {
-    const arrow = document.querySelector(".arrow");
-    arrow.style.transform = `translate(-50%, -50%) rotate(${direction}deg)`;
-    requestAnimationFrame(updateUI);
-}
-
+// Function to get the closest model to the player's current location
 function getClosestModel(playerPosition, models) {
     let closestModel = null;
     let shortestDistance = Infinity;
@@ -164,6 +109,23 @@ function getClosestModel(playerPosition, models) {
     return closestModel;
 }
 
+
+// function initializeMyApp() {
+//     console.log('Initializing the app...');
+//     // Fetch the model positions from the JSON file
+//     fetch('./model_positions.json')  // Update with the correct path to your JSON file
+//         .then(response => response.json())
+//         .then(data => {
+//             console.log('Places loaded: ', data);
+//             renderPlaces(data);  // Pass the fetched data to renderPlaces
+//         })
+//         .catch(error => {
+//             console.error('Error loading the JSON data:', error);
+//         });
+    
+// }
+  
+
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
     console.log('Rendering places...');
@@ -176,27 +138,118 @@ function renderPlaces(places) {
 
         console.log(`Creating model for: ${place.name} at (${latitude}, ${longitude}) with visibility range [${visibilityRange.min}m - ${visibilityRange.max}m]`);
 
+        // Create a new entity for each place
         let model = document.createElement('a-entity');
         model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
         model.setAttribute('gltf-model', `${filePath}`);
         model.setAttribute('rotation', '0 0 0');
         model.setAttribute('animation-mixer', 'clip: *; loop: repeat; timeScale: 1.1; clampWhenFinished: true; crossFadeDuration: 0.3');
         model.setAttribute('look-at', '[gps-camera]');
-        model.setAttribute('scale', '0.15 0.15 0.15'); 
-        model.setAttribute('visible', 'false'); 
+        model.setAttribute('scale', '0.15 0.15 0.15'); // Initial scale
+        model.setAttribute('visible', 'false'); // Initially hidden
 
+        // Wait for the model to fully load before making it visible
         model.addEventListener('model-loaded', () => {
             console.log(`${place.name} model loaded, now visible.`);
             model.setAttribute('visible', 'true');
         });
 
+        // Append the model to the scene
         scene.appendChild(model);
+        // Start the continuous checking process
+        updateModelVisibility();
+        // Set up an interval to constantly check the player's distance and update visibility
+        // let intervalId = setInterval(() => {
+        //     console.log('Checking player position...');
+        //     getPlayerPosition((playerPosition) => {
+        //         if (playerPosition) {
+        //             let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
+        //             console.log(`Distance to ${place.name}: ${distance}m`);
+
+        //             // Check if the player is within the visibility range
+        //             if (distance > visibilityRange.min && distance < visibilityRange.max) {
+        //                 console.log(`${place.name} is within range, showing model.`);
+        //                 model.setAttribute('visible', 'true'); // Show the model
+        //             } else {
+        //                 console.log(`${place.name} is out of range or too close, hiding model.`);
+        //                 model.setAttribute('visible', 'false'); // Hide the model
+        //             }
+        //         } else {
+        //             console.error('Player position could not be retrieved.');
+        //         }
+        //     });
+        // }, 30000); // Check every 30 seconds to hide/reveal the model
+
+        // Store the interval handle so we can clear it later
+        // intervalHandles.push(intervalId);
     });
+}
+
+
+// Function to clear all intervals when removing entities
+// function clearAllIntervals() {
+//     intervalHandles.forEach(intervalId => clearInterval(intervalId));
+//     intervalHandles = []; // Clear the stored handles
+// }
+
+function updateModelVisibility() {
+    console.log('Checking player position...');
+    getPlayerPosition((playerPosition) => {
+        if (playerPosition) {
+            let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
+            console.log(`Distance to ${place.name}: ${distance}m`);
+
+            // Check if the player is within the visibility range
+            if (distance > visibilityRange.min && distance < visibilityRange.max) {
+                console.log(`${place.name} is within range, showing model.`);
+                model.setAttribute('visible', 'true'); // Show the model
+            } else {
+                console.log(`${place.name} is out of range or too close, hiding model.`);
+                model.setAttribute('visible', 'false'); // Hide the model
+            }
+        } else {
+            console.error('Player position could not be retrieved.');
+        }
+    });
+
+    // Use requestAnimationFrame for continuous updates
+    requestAnimationFrame(updateModelVisibility);
+}
+
+// Start the continuous checking process
+updateModelVisibility();
+
+
+// Simulate fetching the player's GPS position (real GPS is handled in getPlayerPosition)
+function getPlayerPosition(callback) {
+    if ("geolocation" in navigator) {
+        console.log('Fetching player position using GPS...');
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                console.log(`Player's current position: Latitude: ${latitude}, Longitude: ${longitude}`);
+                callback({ latitude, longitude });
+            },
+            (error) => {
+                console.error('Error retrieving player position', error);
+                callback(null); // Handle error (e.g., no permission or GPS unavailable)
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 10000, // Cache position for 10 seconds
+                timeout: 5000 // Wait up to 5 seconds for a response
+            }
+        );  
+    } else {
+        console.error('Geolocation not available in this browser.');
+        callback(null); // Handle case when Geolocation is not supported
+    }
 }
 
 // Function to calculate distance between two GPS coordinates (in meters)
 function calculateDistance(lat1, lng1, lat2, lng2) {
-    const R = 6371e3; 
+    console.log(`Calculating distance between (${lat1}, ${lng1}) and (${lat2}, ${lng2})`);
+    const R = 6371e3; // Earth radius in meters
     const phi1 = lat1 * Math.PI / 180;
     const phi2 = lat2 * Math.PI / 180;
     const deltaPhi = (lat2 - lat1) * Math.PI / 180;
@@ -207,5 +260,7 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
               Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    return R * c; 
+    const distance = R * c; // Distance in meters
+    console.log(`Calculated distance: ${distance} meters`);
+    return distance;
 }
