@@ -219,8 +219,6 @@ function updateModelVisibility(name, model, latitude, longitude, visibilityRange
     requestAnimationFrame(() => updateModelVisibility(name, model, latitude, longitude, visibilityRange));
 }
 
-// Start the continuous checking process
-updateModelVisibility();
 
 
 // Simulate fetching the player's GPS position (real GPS is handled in getPlayerPosition)
