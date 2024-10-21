@@ -158,7 +158,7 @@ function renderPlaces(places) {
         // Append the model to the scene
         scene.appendChild(model);
         // Start the continuous checking process
-        updateModelVisibility(model, latitude, longitude, visibilityRange);
+        updateModelVisibility(places, model);
         // Set up an interval to constantly check the player's distance and update visibility
         // let intervalId = setInterval(() => {
         //     console.log('Checking player position...');
@@ -193,28 +193,34 @@ function renderPlaces(places) {
 //     intervalHandles = []; // Clear the stored handles
 // }
 
-function updateModelVisibility(model, latitude, longitude, visibilityRange) {
-    console.log('Checking player position...');
-    getPlayerPosition((playerPosition) => {
-        if (playerPosition) {
-            let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
-            console.log(`Distance to ${place.name}: ${distance}m`);
+function updateModelVisibility(places, model) {
+    places.forEach((place) => {
+        let latitude = place.location.lat;
+        let longitude = place.location.lng;
+        let visibilityRange = place.visibilityRange;
+    
+        console.log('Checking player position...');
+        getPlayerPosition((playerPosition) => {
+            if (playerPosition) {
+                let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
+                console.log(`Distance to ${place.name}: ${distance}m`);
 
-            // Check if the player is within the visibility range
-            if (distance > visibilityRange.min && distance < visibilityRange.max) {
-                console.log(`${place.name} is within range, showing model.`);
-                model.setAttribute('visible', 'true'); // Show the model
+                // Check if the player is within the visibility range
+                if (distance > visibilityRange.min && distance < visibilityRange.max) {
+                    console.log(`${place.name} is within range, showing model.`);
+                    model.setAttribute('visible', 'true'); // Show the model
+                } else {
+                    console.log(`${place.name} is out of range or too close, hiding model.`);
+                    model.setAttribute('visible', 'false'); // Hide the model
+                }
             } else {
-                console.log(`${place.name} is out of range or too close, hiding model.`);
-                model.setAttribute('visible', 'false'); // Hide the model
+                console.error('Player position could not be retrieved.');
             }
-        } else {
-            console.error('Player position could not be retrieved.');
-        }
-    });
+        });
 
-    // Use requestAnimationFrame for continuous updates
-    requestAnimationFrame(updateModelVisibility);
+        // Use requestAnimationFrame for continuous updates
+        requestAnimationFrame(updateModelVisibility);
+    })
 }
 
 // Start the continuous checking process
