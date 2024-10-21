@@ -141,7 +141,7 @@ function renderPlaces(places) {
         // Start the continuous checking process
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
 
-        const circles = document.querySelectorAll('.dropdown-circle');
+        let circles = document.querySelectorAll('.dropdown-circle');
         circles.forEach((circle) => {
             console.log(circle); // Logs each element with class 'dropdown-circle'
             // Add event listener to select model
