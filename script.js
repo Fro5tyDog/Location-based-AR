@@ -284,7 +284,7 @@ function selectNewModel(name, latitude, longitude, visibilityRange) {
 
     // Find the <a-entity> with the matching gltf-model attribute
     const model = document.querySelector(`.${name}`);
-
+  
     if (model) {
         console.log(`Found model with name: ${name}`);
         
