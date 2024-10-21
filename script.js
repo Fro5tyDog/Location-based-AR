@@ -91,6 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
         navigator.geolocation.watchPosition(setCurrentPosition, null, geolocationOptions);
         if (!isIOS) {
             window.addEventListener("deviceorientationabsolute", runCalculation);
+        } else {
+            startCompass()       
         }
 
         // Start the UI updates
