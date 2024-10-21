@@ -1,10 +1,22 @@
 body {
     margin: 0;
     overflow: hidden;
+    position: relative;
 }
 
 canvas {
-    display: block;
-    margin: 0 auto;
-    background-color: black; /* Set the background for the UI canvas */
+    position: absolute; /* Makes it overlay on top of the A-frame scene */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensure canvas covers the whole screen */
+    height: 100%;
+    z-index: 1000; /* High z-index to ensure it's above A-frame */
+    pointer-events: none; /* Prevents canvas from blocking interactions with A-frame */
+    background-color: transparent; /* Make sure canvas is transparent so you see A-frame behind it */
+}
+
+a-scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
 }
