@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
         ctx.fillText(`Closest model: ${closestModelName}`, 200, 240);
+
+        // Draw dropdown circles
+        drawDropdown(modelsData); // Ensure dropdown circles are drawn
     }
 
     // Draw dropdown circles dynamically
@@ -85,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.stroke();
 
             const img = new Image();
-            img.src = `./assets/model_Icons/${model.name.toLowerCase()}.png`;
+            img.src = `./assets/model_Icons/${model.name.toLowerCase()}.png`; // Make sure this path is correct
             img.onload = () => {
                 ctx.drawImage(img, x - 20, y - 20, 40, 40);
             };
