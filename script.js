@@ -2,6 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('uiCanvas');
     const ctx = canvas.getContext('2d');
 
+    // Function to resize the canvas to match the window size
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    // Call resizeCanvas whenever the window is resized
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas(); // Initial resize to set canvas size
+
     // Load images for the UI circles
     const img3DModels = new Image();
     img3DModels.src = './assets/ui_Images/3dModels.png';
