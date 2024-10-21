@@ -275,6 +275,27 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
     return distance;
 }
 
+// function selectNewModel(name, latitude, longitude, visibilityRange) {
+//     // Cancel the previous animation frame (if any)
+//     if (animationFrameId) {
+//         cancelAnimationFrame(animationFrameId);
+//         console.log(`Canceled animation for the previous model.`);
+//     }
+
+//     // Find the <a-entity> with the matching gltf-model attribute
+//     const model = document.querySelector(`.${name}`);
+  
+//     if (model) {
+//         console.log(`Found model with name: ${name}`);
+        
+//         // Start updating the new model
+//         //set visibility of other models to be false
+//         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
+//     } else {
+//         console.error(`Model with filePath: ${name} not found`);
+//     }
+// }
+
 function selectNewModel(name, latitude, longitude, visibilityRange) {
     // Cancel the previous animation frame (if any)
     if (animationFrameId) {
@@ -289,10 +310,29 @@ function selectNewModel(name, latitude, longitude, visibilityRange) {
         console.log(`Found model with name: ${name}`);
         
         // Start updating the new model
-        //set visibility of other models to be false
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
+        
+        // Get player position
+        getPlayerPosition((playerPosition) => {
+            if (playerPosition) {
+                // Calculate the angle to the selected model
+                const angle = calculateAngle(playerPosition, { lat: latitude, lng: longitude });
+
+                // Rotate the arrow
+                const arrowElement = document.querySelector('.arrow');
+                arrowElement.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+            }
+        });
     } else {
-        console.error(`Model with filePath: ${name} not found`);
+        console.error(`Model with name: ${name} not found`);
     }
 }
+
+function calculateAngle(playerPosition, modelPosition) {
+    const deltaY = modelPosition.lat - playerPosition.latitude;
+    const deltaX = modelPosition.lng - playerPosition.longitude;
+    const angleInDegrees = Math.atan2(deltaY, deltaX) * 180 / Math.PI; // Convert radians to degrees
+    return angleInDegrees;
+}
+
 
