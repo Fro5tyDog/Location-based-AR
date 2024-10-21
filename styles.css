@@ -38,14 +38,12 @@
     position: absolute;
     width: 50%; /* Adjust the width and height as needed */
     height: 50%;
-    top: 42.5%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: url("https://p9n2c8y2.rocketcdn.me/wp-content/uploads/2021/05/24.png.webp")
-        center no-repeat;
+    background: url("https://p9n2c8y2.rocketcdn.me/wp-content/uploads/2021/05/24.png.webp") center no-repeat;
     background-size: 115% 115%;
     z-index: 2000;
-    position: relative;
 }
 
 
