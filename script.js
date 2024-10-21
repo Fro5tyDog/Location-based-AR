@@ -216,7 +216,7 @@ function updateModelVisibility(name, model, latitude, longitude, visibilityRange
     });
 
     // Use requestAnimationFrame for continuous updates
-    requestAnimationFrame(() => updateModelVisibility(name, model, latitude, longitude, visibilityRange));questAnimationFrame(updateModelVisibility);
+    requestAnimationFrame(() => updateModelVisibility(name, model, latitude, longitude, visibilityRange));
 }
 
 // Start the continuous checking process
