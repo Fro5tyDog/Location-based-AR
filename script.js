@@ -1,5 +1,5 @@
 let intervalHandles = []; // Array to store interval handles for each entity
-
+let animationFrameId; // Store the animation frame ID globally
 
 document.addEventListener('DOMContentLoaded', function () {
     const scene = document.querySelector('a-scene');
@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function createDropdownCircles(models) {
         models.forEach((model, index) => {
+            let latitude = model.location.lat;
+            let longitude = model.location.lng;
+            let visibilityRange = model.visibilityRange;
+            let name = model.name;
             const circle = document.createElement('div');
             circle.classList.add('dropdown-circle');
 
@@ -46,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     circle.classList.remove('selected');
                     selectedIcon = null;
                     console.log(`Deselected model: ${model.name}`);
+                    // Cancel any ongoing animation for the previous model
+                    selectNewModel(name, model, latitude, longitude, visibilityRange);
                 } else {
                     // Deselect the previous icon, if any
                     if (selectedIcon) {
@@ -55,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     circle.classList.add('selected');
                     selectedIcon = circle;
                     console.log(`Selected model: ${model.name}`);
+                    // Cancel any ongoing animation for the previous model
+                    selectNewModel(name, model, latitude, longitude, visibilityRange);
                 }
             });
 
@@ -216,7 +224,7 @@ function updateModelVisibility(name, model, latitude, longitude, visibilityRange
     });
 
     // Use requestAnimationFrame for continuous updates
-    requestAnimationFrame(() => updateModelVisibility(name, model, latitude, longitude, visibilityRange));
+    animationFrameId = requestAnimationFrame(() => updateModelVisibility(name, model, latitude, longitude, visibilityRange));
 }
 
 
@@ -264,4 +272,15 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
     const distance = R * c; // Distance in meters
     console.log(`Calculated distance: ${distance} meters`);
     return distance;
+}
+
+function selectNewModel(name, model, latitude, longitude, visibilityRange) {
+    // Cancel the previous animation frame (if any)
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        console.log(`Canceled animation for the previous model.`);
+    }
+
+    // Start updating the new model
+    updateModelVisibility(name, model, latitude, longitude, visibilityRange);
 }
