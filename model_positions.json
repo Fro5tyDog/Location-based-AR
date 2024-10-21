@@ -7,7 +7,7 @@
       "lng": 103.85004662847754
     },
     "visibilityRange": {
-      "min": 0,
+      "min": 10,
       "max": 150
     }
   },
