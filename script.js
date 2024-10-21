@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
             let longitude = model.location.lng;
             let visibilityRange = model.visibilityRange;
             let name = model.name;
-            let filepath = model.filepath;
             const circle = document.createElement('div');
             circle.classList.add('dropdown-circle');
 
@@ -52,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     selectedIcon = null;
                     console.log(`Deselected model: ${model.name}`);
                     // Cancel any ongoing animation for the previous model
-                    selectNewModel(name, filepath, latitude, longitude, visibilityRange);
+                    selectNewModel(name, latitude, longitude, visibilityRange);
                 } else {
                     // Deselect the previous icon, if any
                     if (selectedIcon) {
@@ -63,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     selectedIcon = circle;
                     console.log(`Selected model: ${model.name}`);
                     // Cancel any ongoing animation for the previous model
-                    selectNewModel(name, filepath, latitude, longitude, visibilityRange);
+                    selectNewModel(name, latitude, longitude, visibilityRange);
                 }
             });
 
@@ -163,6 +162,7 @@ function renderPlaces(places) {
         model.addEventListener('model-loaded', () => {
             console.log(`${place.name} model loaded, now visible.`);
             model.setAttribute('visible', 'true');
+            model.classList.add(`${place.name}`);
         });
 
         // Append the model to the scene
@@ -275,7 +275,7 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
     return distance;
 }
 
-function selectNewModel(name, filePath, latitude, longitude, visibilityRange) {
+function selectNewModel(name, latitude, longitude, visibilityRange) {
     // Cancel the previous animation frame (if any)
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
@@ -283,16 +283,16 @@ function selectNewModel(name, filePath, latitude, longitude, visibilityRange) {
     }
 
     // Find the <a-entity> with the matching gltf-model attribute
-    const model = document.querySelector(`a-entity[gltf-model='${filePath}']`);
+    const model = document.querySelector(`.${name}`);
 
     if (model) {
-        console.log(`Found model with filePath: ${filePath}`);
+        console.log(`Found model with name: ${name}`);
         
         // Start updating the new model
         //set visibility of other models to be false
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
     } else {
-        console.error(`Model with filePath: ${filePath} not found`);
+        console.error(`Model with filePath: ${name} not found`);
     }
 }
 
