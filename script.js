@@ -159,7 +159,7 @@ function renderPlaces(places) {
         // Append the model to the scene
         scene.appendChild(model);
         // Start the continuous checking process
-        updateModelVisibility(name, model, place.location.lat, place.location.lng, place.visibilityRange);
+        updateModelVisibility(name, model, latitude, longitude, visibilityRange);
         // Set up an interval to constantly check the player's distance and update visibility
         // let intervalId = setInterval(() => {
         //     console.log('Checking player position...');
@@ -216,7 +216,7 @@ function updateModelVisibility(name, model, latitude, longitude, visibilityRange
     });
 
     // Use requestAnimationFrame for continuous updates
-    requestAnimationFrame(updateModelVisibility);
+    requestAnimationFrame(() => updateModelVisibility(name, model, latitude, longitude, visibilityRange));questAnimationFrame(updateModelVisibility);
 }
 
 // Start the continuous checking process
