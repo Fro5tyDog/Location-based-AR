@@ -1,4 +1,8 @@
 let intervalHandles = []; // Array to store interval handles for each entity
+let current = { latitude: null, longitude: null };
+let target = { latitude: 1.308626683108172, longitude: 103.85004662847754 }; // Default target to "magnemite"
+let lastAlpha = 0;
+let direction = 0;
 
 document.addEventListener('DOMContentLoaded', function () {
     const scene = document.querySelector('a-scene');
@@ -62,6 +66,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Set the default target to the first model in the JSON data
+    function setDefaultTarget(models) {
+        if (models.length > 0) {
+            target.latitude = models[0].location.lat;
+            target.longitude = models[0].location.lng;
+            console.log(`Default target set to ${models[0].name} at (${target.latitude}, ${target.longitude})`);
+        }
+    }
+
     scene.addEventListener('loaded', function () {
         console.log('A-Frame scene fully initialized');
         initializeMyApp();
@@ -91,6 +104,7 @@ function initializeMyApp() {
         .catch(error => {
             console.error('Error loading the JSON data:', error);
         });
+   
 }
 
 // Function to get the closest model to the player's current location
@@ -106,7 +120,21 @@ function getClosestModel(playerPosition, models) {
         }
     });
 
+    // Start geolocation and compass
+    navigator.geolocation.watchPosition(setCurrentPosition, null, { enableHighAccuracy: true });
+    if (!navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+        window.addEventListener("deviceorientationabsolute", runCalculation);
+    }
+    updateUI();
+
     return closestModel;
+}
+
+
+function updateUI() {
+    const arrow = document.querySelector(".arrow");
+    arrow.style.transform = `translate(-50%, -50%) rotate(${direction}deg)`;
+    requestAnimationFrame(updateUI);
 }
 
 
@@ -263,4 +291,26 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
     const distance = R * c; // Distance in meters
     console.log(`Calculated distance: ${distance} meters`);
     return distance;
+}
+
+// compass
+function runCalculation(event) {
+    var alpha = Math.abs(360 - event.webkitCompassHeading) || event.alpha;
+    if (alpha == null || Math.abs(alpha - lastAlpha) > 1) {
+        var lat1 = current.latitude * (Math.PI / 180);
+        var lon1 = current.longitude * (Math.PI / 180);
+        var lat2 = target.latitude * (Math.PI / 180);
+        var lon2 = target.longitude * (Math.PI / 180);
+
+        // calculate compass direction
+        var y = Math.sin(lon2 - lon1) * Math.cos(lat2);
+        var x = Math.cos(lat1) * Math.sin(lat2) -
+            Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+        var bearing = Math.atan2(y, x) * (180 / Math.PI);
+
+        direction = (alpha + bearing + 360) % 360;
+        direction = direction.toFixed(0);
+
+        lastAlpha = alpha;
+    }
 }
