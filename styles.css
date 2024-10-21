@@ -36,8 +36,8 @@
 
 .arrow {
     position: absolute;
-    width: 13.5vw; /* Adjust the width and height as needed */
-    height: 13.5vw;
+    width: 50%; /* Adjust the width and height as needed */
+    height: 50%;
     top: 42.5%;
     left: 50%;
     transform: translate(-50%, -50%);
