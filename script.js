@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const dropdownContainer = document.getElementById('dropdown-container');
     const topLeftCircle = document.getElementById('top-left-circle');
     let dropdownVisible = false;
+    let selectedIcon = null; // Track the currently selected icon
 
     // Toggle dropdown visibility on click
     topLeftCircle.addEventListener('click', function () {
@@ -26,6 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function createDropdownCircles(models) {
         models.forEach((model, index) => {
+            let latitude = model.location.lat;
+            let longitude = model.location.lng;
+            let visibilityRange = model.visibilityRange;
+            let name = model.name;
+            let filepath = mode.filepath;
             const circle = document.createElement('div');
             circle.classList.add('dropdown-circle');
 
@@ -36,6 +42,30 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // Append image to the circle
             circle.appendChild(img);
+
+            // Add event listener to select model
+            circle.addEventListener('click', function () {
+                // Implement model focus logic here (e.g., update arrow direction)
+                if (circle === selectedIcon) {
+                    // Deselect if the same icon is clicked again
+                    circle.classList.remove('selected');
+                    selectedIcon = null;
+                    console.log(`Deselected model: ${model.name}`);
+                    // Cancel any ongoing animation for the previous model
+                    selectNewModel(name, filepath, latitude, longitude, visibilityRange);
+                } else {
+                    // Deselect the previous icon, if any
+                    if (selectedIcon) {
+                        selectedIcon.classList.remove('selected');
+                    }
+                    // Select the new icon
+                    circle.classList.add('selected');
+                    selectedIcon = circle;
+                    console.log(`Selected model: ${model.name}`);
+                    // Cancel any ongoing animation for the previous model
+                    selectNewModel(name, filepath, latitude, longitude, visibilityRange);
+                }
+            });
 
             // Append the circle to the dropdown container
             dropdownContainer.appendChild(circle);
@@ -107,7 +137,6 @@ function getClosestModel(playerPosition, models) {
   
 
 function renderPlaces(places) {
-    let selectedIcon = null; // Track the currently selected icon
     let scene = document.querySelector('a-scene');
     console.log('Rendering places...');
 
@@ -140,35 +169,30 @@ function renderPlaces(places) {
         scene.appendChild(model);
         // Start the continuous checking process
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
+        // Set up an interval to constantly check the player's distance and update visibility
+        // let intervalId = setInterval(() => {
+        //     console.log('Checking player position...');
+        //     getPlayerPosition((playerPosition) => {
+        //         if (playerPosition) {
+        //             let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
+        //             console.log(`Distance to ${place.name}: ${distance}m`);
 
-        let circles = document.querySelectorAll('.dropdown-circle');
-        circles.forEach((circle) => {
-            console.log(circle); // Logs each element with class 'dropdown-circle'
-            // Add event listener to select model
-            circle.addEventListener('click', function () {
-                // Implement model focus logic here (e.g., update arrow direction)
-                if (circle === selectedIcon) {
-                    // Deselect if the same icon is clicked again
-                    circle.classList.remove('selected');
-                    selectedIcon = null;
-                    console.log(`Deselected model: ${model.name}`);
-                    // Cancel any ongoing animation for the previous model
-                    selectNewModel(name, model, latitude, longitude, visibilityRange);
-                } else {
-                    // Deselect the previous icon, if any
-                    if (selectedIcon) {
-                        selectedIcon.classList.remove('selected');
-                    }
-                    // Select the new icon
-                    circle.classList.add('selected');
-                    selectedIcon = circle;
-                    console.log(`Selected model: ${model.name}`);
-                    // Cancel any ongoing animation for the previous model
-                    selectNewModel(name, model, latitude, longitude, visibilityRange);
-                }
-            });
-        });
-        
+        //             // Check if the player is within the visibility range
+        //             if (distance > visibilityRange.min && distance < visibilityRange.max) {
+        //                 console.log(`${place.name} is within range, showing model.`);
+        //                 model.setAttribute('visible', 'true'); // Show the model
+        //             } else {
+        //                 console.log(`${place.name} is out of range or too close, hiding model.`);
+        //                 model.setAttribute('visible', 'false'); // Hide the model
+        //             }
+        //         } else {
+        //             console.error('Player position could not be retrieved.');
+        //         }
+        //     });
+        // }, 30000); // Check every 30 seconds to hide/reveal the model
+
+        // Store the interval handle so we can clear it later
+        // intervalHandles.push(intervalId);
     });
 }
 
@@ -251,13 +275,23 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
     return distance;
 }
 
-function selectNewModel(name, model, latitude, longitude, visibilityRange) {
+function selectNewModel(name, filePath, latitude, longitude, visibilityRange) {
     // Cancel the previous animation frame (if any)
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
         console.log(`Canceled animation for the previous model.`);
     }
 
-    // Start updating the new model
-    updateModelVisibility(name, model, latitude, longitude, visibilityRange);
+    // Find the <a-entity> with the matching gltf-model attribute
+    const model = document.querySelector(`a-entity[gltf-model='${filePath}']`);
+
+    if (model) {
+        console.log(`Found model with filePath: ${filePath}`);
+        
+        // Start updating the new model
+        updateModelVisibility(name, model, latitude, longitude, visibilityRange);
+    } else {
+        console.error(`Model with filePath: ${filePath} not found`);
+    }
 }
+
