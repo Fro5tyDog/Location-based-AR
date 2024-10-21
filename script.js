@@ -194,9 +194,9 @@ function initializeMyApp() {
                 if (playerPosition) {
                     const closestModel = getClosestModel(playerPosition, data);
                     // Update the text with the closest model's name
-                    const locationText = document.getElementById('closest-location');
-                    locationText.innerHTML = `Closest model: ${closestModel.name}`;
-                    console.log(`Closest model is: ${closestModel.name}`);
+                    // const locationText = document.getElementById('closest-location');
+                    // locationText.innerHTML = `Closest model: ${closestModel.name}`;
+                    // console.log(`Closest model is: ${closestModel.name}`);
                 }
             });
             renderPlaces(data);  // Pass the fetched data to renderPlaces
