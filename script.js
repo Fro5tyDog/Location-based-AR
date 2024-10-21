@@ -296,37 +296,81 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
 //     }
 // }
 
+// function selectNewModel(name, latitude, longitude, visibilityRange) {
+//     // Cancel the previous animation frame (if any)
+//     if (animationFrameId) {
+//         cancelAnimationFrame(animationFrameId);
+//         console.log(`Canceled animation for the previous model.`);
+//     }
+
+//     // Find the <a-entity> with the matching gltf-model attribute
+//     const model = document.querySelector(`.${name}`);
+  
+//     if (model) {
+//         console.log(`Found model with name: ${name}`);
+        
+//         // Start updating the new model
+//         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
+        
+//         // Get player position
+//         getPlayerPosition((playerPosition) => {
+//             if (playerPosition) {
+//                 // Calculate the angle to the selected model
+//                 const angle = calculateAngle(playerPosition, { lat: latitude, lng: longitude });
+
+//                 // Rotate the arrow
+//                 const arrowElement = document.querySelector('.arrow');
+//                 arrowElement.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+//             }
+//         });
+//     } else {
+//         console.error(`Model with name: ${name} not found`);
+//     }
+// }
+
+let animationFrameId1;
 function selectNewModel(name, latitude, longitude, visibilityRange) {
-    // Cancel the previous animation frame (if any)
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
         console.log(`Canceled animation for the previous model.`);
     }
 
-    // Find the <a-entity> with the matching gltf-model attribute
+    if(animationFrameId1){
+        cancelAnimationFrame(animationFrameId1);
+        console.log(`Canceled animation arrow for the previous model.`);
+    }
+
     const model = document.querySelector(`.${name}`);
-  
+
     if (model) {
         console.log(`Found model with name: ${name}`);
-        
-        // Start updating the new model
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
-        
-        // Get player position
-        getPlayerPosition((playerPosition) => {
-            if (playerPosition) {
-                // Calculate the angle to the selected model
-                const angle = calculateAngle(playerPosition, { lat: latitude, lng: longitude });
 
-                // Rotate the arrow
-                const arrowElement = document.querySelector('.arrow');
-                arrowElement.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
-            }
-        });
+        function updateArrowAndDistance() {
+            getPlayerPosition((playerPosition) => {
+                if (playerPosition) {
+                    const angle = calculateAngle(playerPosition, { lat: latitude, lng: longitude });
+                    const arrowElement = document.querySelector('.arrow');
+                    arrowElement.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+
+                    const distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
+                    const locationText = document.getElementById('closest-location');
+                    locationText.innerHTML = `Model: ${name}, Distance: ${Math.round(distance)} meters`;
+
+                    console.log(`Updated arrow and distance: ${name} is ${Math.round(distance)} meters away`);
+                }
+            });
+
+            animationFrameId1 = requestAnimationFrame(updateArrowAndDistance);
+        }
+
+        updateArrowAndDistance();
+
     } else {
         console.error(`Model with name: ${name} not found`);
     }
 }
+
 
 function calculateAngle(playerPosition, modelPosition) {
     const deltaY = modelPosition.lat - playerPosition.latitude;
