@@ -27,10 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function createDropdownCircles(models) {
         models.forEach((model, index) => {
-            let latitude = model.location.lat;
-            let longitude = model.location.lng;
-            let visibilityRange = model.visibilityRange;
-            let name = model.name;
             const circle = document.createElement('div');
             circle.classList.add('dropdown-circle');
 
@@ -41,30 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // Append image to the circle
             circle.appendChild(img);
-
-            // Add event listener to select model
-            circle.addEventListener('click', function () {
-                // Implement model focus logic here (e.g., update arrow direction)
-                if (circle === selectedIcon) {
-                    // Deselect if the same icon is clicked again
-                    circle.classList.remove('selected');
-                    selectedIcon = null;
-                    console.log(`Deselected model: ${model.name}`);
-                    // Cancel any ongoing animation for the previous model
-                    selectNewModel(name, model, latitude, longitude, visibilityRange);
-                } else {
-                    // Deselect the previous icon, if any
-                    if (selectedIcon) {
-                        selectedIcon.classList.remove('selected');
-                    }
-                    // Select the new icon
-                    circle.classList.add('selected');
-                    selectedIcon = circle;
-                    console.log(`Selected model: ${model.name}`);
-                    // Cancel any ongoing animation for the previous model
-                    selectNewModel(name, model, latitude, longitude, visibilityRange);
-                }
-            });
 
             // Append the circle to the dropdown container
             dropdownContainer.appendChild(circle);
@@ -192,6 +164,35 @@ function renderPlaces(places) {
 
         // Store the interval handle so we can clear it later
         // intervalHandles.push(intervalId);
+
+        const circles = document.querySelectorAll('.dropdown-circle');
+        circles.forEach((circle) => {
+            console.log(circle); // Logs each element with class 'dropdown-circle'
+            // Add event listener to select model
+            circle.addEventListener('click', function () {
+                // Implement model focus logic here (e.g., update arrow direction)
+                if (circle === selectedIcon) {
+                    // Deselect if the same icon is clicked again
+                    circle.classList.remove('selected');
+                    selectedIcon = null;
+                    console.log(`Deselected model: ${model.name}`);
+                    // Cancel any ongoing animation for the previous model
+                    selectNewModel(name, model, latitude, longitude, visibilityRange);
+                } else {
+                    // Deselect the previous icon, if any
+                    if (selectedIcon) {
+                        selectedIcon.classList.remove('selected');
+                    }
+                    // Select the new icon
+                    circle.classList.add('selected');
+                    selectedIcon = circle;
+                    console.log(`Selected model: ${model.name}`);
+                    // Cancel any ongoing animation for the previous model
+                    selectNewModel(name, model, latitude, longitude, visibilityRange);
+                }
+            });
+        });
+        
     });
 }
 
