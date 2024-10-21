@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let longitude = model.location.lng;
             let visibilityRange = model.visibilityRange;
             let name = model.name;
-            let filepath = mode.filepath;
+            let filepath = model.filepath;
             const circle = document.createElement('div');
             circle.classList.add('dropdown-circle');
 
@@ -289,6 +289,7 @@ function selectNewModel(name, filePath, latitude, longitude, visibilityRange) {
         console.log(`Found model with filePath: ${filePath}`);
         
         // Start updating the new model
+        //set visibility of other models to be false
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
     } else {
         console.error(`Model with filePath: ${filePath} not found`);
