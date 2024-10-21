@@ -2,16 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('uiCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Function to resize the canvas to match the window size
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-
-    // Call resizeCanvas whenever the window is resized
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas(); // Initial resize to set canvas size
-
     // Load images for the UI circles
     const img3DModels = new Image();
     img3DModels.src = './assets/ui_Images/3dModels.png';
@@ -23,6 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let arrowRotation = 0; // Rotation for arrow
     let closestModelName = 'None'; // Closest model text
     let modelsData = []; // Holds the model data for dropdown and rendering
+
+    // Function to resize the canvas and retain the window dimensions
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawUI(); // Redraw the UI whenever the canvas resizes
+    }
+
+    // Attach resize event listener to window and immediately resize the canvas
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas(); // Set the initial size
 
     // Draw UI on the canvas
     function drawUI() {

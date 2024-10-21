@@ -1,23 +1,24 @@
 body {
     margin: 0;
     overflow: hidden;
-    height: 100vh; /* Ensure the body takes up the full height */
+    height: 100vh; /* Full height for body */
 }
 
 canvas {
-    position: absolute; /* Position the canvas absolutely */
+    position: absolute; /* Overlay on top of A-frame */
     top: 0;
     left: 0;
-    width: 100vw; /* Full width */
-    height: 100vh; /* Full height */
-    z-index: 1000; /* Ensure it's above the A-frame scene */
-    pointer-events: none; /* Canvas should not block interactions */
-    background-color: transparent; /* Canvas is transparent */
+    width: 100vw; /* Full width of the viewport */
+    height: 100vh; /* Full height of the viewport */
+    z-index: 1000; /* Ensure it's on top */
+    pointer-events: none; /* Prevent canvas from blocking interactions */
+    background-color: transparent; /* Keep it transparent */
+    display: block; /* Ensure it's always displayed */
 }
 
 a-scene {
-    position: relative; /* Ensure the A-frame scene stays below the canvas */
+    position: relative; /* Ensure it's behind the canvas */
     width: 100vw;
     height: 100vh;
-    z-index: 1; /* Lower z-index to stay behind the canvas */
+    z-index: 1; /* Lower z-index to stay behind canvas */
 }
