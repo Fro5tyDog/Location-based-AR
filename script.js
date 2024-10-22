@@ -118,23 +118,6 @@ function getClosestModel(playerPosition, models) {
     return closestModel;
 }
 
-
-// function initializeMyApp() {
-//     console.log('Initializing the app...');
-//     // Fetch the model positions from the JSON file
-//     fetch('./model_positions.json')  // Update with the correct path to your JSON file
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log('Places loaded: ', data);
-//             renderPlaces(data);  // Pass the fetched data to renderPlaces
-//         })
-//         .catch(error => {
-//             console.error('Error loading the JSON data:', error);
-//         });
-    
-// }
-  
-
 function renderPlaces(places) {
     let scene = document.querySelector('a-scene');
     console.log('Rendering places...');
@@ -169,39 +152,9 @@ function renderPlaces(places) {
         scene.appendChild(model);
         // Start the continuous checking process
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
-        // Set up an interval to constantly check the player's distance and update visibility
-        // let intervalId = setInterval(() => {
-        //     console.log('Checking player position...');
-        //     getPlayerPosition((playerPosition) => {
-        //         if (playerPosition) {
-        //             let distance = calculateDistance(playerPosition.latitude, playerPosition.longitude, latitude, longitude);
-        //             console.log(`Distance to ${place.name}: ${distance}m`);
-
-        //             // Check if the player is within the visibility range
-        //             if (distance > visibilityRange.min && distance < visibilityRange.max) {
-        //                 console.log(`${place.name} is within range, showing model.`);
-        //                 model.setAttribute('visible', 'true'); // Show the model
-        //             } else {
-        //                 console.log(`${place.name} is out of range or too close, hiding model.`);
-        //                 model.setAttribute('visible', 'false'); // Hide the model
-        //             }
-        //         } else {
-        //             console.error('Player position could not be retrieved.');
-        //         }
-        //     });
-        // }, 30000); // Check every 30 seconds to hide/reveal the model
-
-        // Store the interval handle so we can clear it later
-        // intervalHandles.push(intervalId);
     });
 }
 
-
-// Function to clear all intervals when removing entities
-// function clearAllIntervals() {
-//     intervalHandles.forEach(intervalId => clearInterval(intervalId));
-//     intervalHandles = []; // Clear the stored handles
-// }
 
 function updateModelVisibility(name, model, latitude, longitude, visibilityRange) {
     
