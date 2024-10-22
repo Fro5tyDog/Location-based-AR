@@ -51,6 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     selectedIcon = null;
                     console.log(`Deselected model: ${model.name}`);
                     // Cancel any ongoing animation for the previous model
+                    const locationText = document.getElementById('closest-location');
+                    locationText.innerHTML = `update`;
                     selectNewModel(name, latitude, longitude, visibilityRange);
                 } else {
                     // Deselect the previous icon, if any
@@ -245,7 +247,7 @@ function selectNewModel(name, latitude, longitude, visibilityRange) {
         //set visibility of other models to be false
         updateModelVisibility(name, model, latitude, longitude, visibilityRange);
     } else {
-        console.error(`Model with filePath: ${name} not found`);
+        console.error(`Model with ${name} not found`);
     }
 }
 
