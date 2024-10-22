@@ -1,24 +1,101 @@
-body {
-    margin: 0;
+/* Styling for the circles */
+.circle-container {
+    position: fixed;
+    top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 10; /* Make sure this is above the A-Frame scene */
+    pointer-events: auto; /* Enable pointer events */
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
-    height: 100vh; /* Full height for body */
+    pointer-events: auto; /* Ensure the circles can receive pointer events */
 }
 
-canvas {
-    position: absolute; /* Overlay on top of A-frame */
-    top: 0;
-    left: 0;
-    width: 100vw; /* Full width of the viewport */
-    height: 100vh; /* Full height of the viewport */
-    z-index: 1000; /* Ensure it's on top */
-    pointer-events: none; /* Prevent canvas from blocking interactions */
-    background-color: transparent; /* Keep it transparent */
-    display: block; /* Ensure it's always displayed */
+.circle img {
+    width: 80%;
+    height: auto;
 }
 
-a-scene {
-    position: relative; /* Ensure it's behind the canvas */
-    width: 100vw;
-    height: 100vh;
-    z-index: 1; /* Lower z-index to stay behind canvas */
+.circle-center {
+    margin: 0 auto;
+    background-color: #0ee85e;
+    position: relative;
+}
+
+.arrow {
+    position: absolute;
+    width: 50%; /* Adjust the width and height as needed */
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url("https://p9n2c8y2.rocketcdn.me/wp-content/uploads/2021/05/24.png.webp") center no-repeat;
+    background-size: 115% 115%;
+    z-index: 2000;
+}
+
+
+.text-container {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    top: 90px;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+}
+
+#closest-location {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+    font-family: Arial, sans-serif;
+    white-space: normal; 
+}
+
+/* Dropdown styling */
+.dropdown-container {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10; /* Make sure this is above the A-Frame scene */
+    pointer-events: auto; /* Enable pointer events */
+}
+
+.dropdown-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Selected state */
+.dropdown-circle.selected {
+    background-color: green; /* Selected turns green */
+}
+
+.dropdown-circle img {
+    width: 80%;
+    height: auto;
 }
