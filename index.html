@@ -15,8 +15,25 @@
 <script src="script.js"></script>
 
 <body style='margin: 0; overflow: hidden;'>  
-    <!-- The canvas will be overlaid on the A-frame scene -->
-    <canvas id="uiCanvas"></canvas> 
+
+    <div class="circle-container">
+        <div class="circle" id="top-left-circle">
+            <img src="./assets/ui_Images/3dModels.png" alt="3D Models"> <!-- Top Left Circle Image -->
+        </div> 
+        <div class="circle circle-center">
+            <div class="arrow"></div><br>
+            <!-- <img src="./assets/ui_Images/arrow.png" alt="Arrow"> Center Circle Image -->
+            <div class="text-container">
+                <div id="closest-location"></div> <!-- Text Below the Middle Circle -->
+            </div>
+        </div>
+        <div class="circle">
+            <img src="./assets/ui_Images/mapIcon.png" alt="Map Icon"> <!-- Top Right Circle Image -->
+        </div> 
+    </div>
+
+    <div class="dropdown-container" id="dropdown-container"></div> <!-- Dropdown to show model icons -->
+
     
     <a-scene
         vr-mode-ui="enabled: false"
@@ -24,6 +41,6 @@
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'
         renderer="precision: mediump; antialias: false; alpha: true; logarithmicDepthBuffer: true; colorManagement: true;">
         <a-camera gps-camera rotation-reader wasd-controls-enabled="false"></a-camera>
-    </a-scene>
+    </a-scene>  
 </body>
 </html>
